@@ -6,5 +6,29 @@
 <body>
   <h1>Welcome to My Project</h1>
   <p>This is the default page for my project.</p>
+  <ul id="file-list"></ul>
+
+  <script>
+    // 取得根目錄下的檔案列表
+    fetch('./')
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const files = Array.from(doc.querySelectorAll('a')).map(link => link.getAttribute('href'));
+
+        const fileList = document.getElementById('file-list');
+        files.forEach(file => {
+          if (file !== '../') {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = file;
+            link.textContent = file;
+            listItem.appendChild(link);
+            fileList.appendChild(listItem);
+          }
+        });
+      });
+  </script>
 </body>
 </html>
