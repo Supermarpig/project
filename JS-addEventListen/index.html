@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button class="button">按鈕</button>
+</body>
+<script>
+    function getElement(cssSelector) {
+        //請完成getElement函數，讓後續的程式順利執行
+        const dom = document.querySelector(cssSelector);
+        const domProxy = new Proxy(dom, {
+            get(target, key) {
+                // console.log(key);
+                if (!key.startsWith('wait')) {
+                    return target[key];
+                };
+                const even = key.replace('wait', '').toLowerCase(); //事件的名字
+                // console.log(even);
+                return new Promise((resolve) => {
+                    target.addEventListener(even, resolve, { once: true })  //監聽事件，然後調用resolve ，只做一次!
+                })
+            }
+        })
+
+        return domProxy;
+    }
+
+    // (async () => {
+    //     const btn = getElement('button');
+    //     while (1) {
+    //         await btn.waitClick;
+    //         console.log('按鈕被點擊了!!')
+    //     }
+    //     console.log(btn.clientWidth)
+    // })();
+
+    (async () => {
+        const btn = getElement('button');
+        for (let i = 0; i < 10; i++) {
+            const e =await btn.waitClick;
+            console.log('按鈕被點擊了!!', e)
+        }
+
+        console.log(btn.clientWidth)
+    })();
+
+</script>
+
+</html>
