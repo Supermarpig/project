@@ -1,3 +1,13 @@
+$circle-colors: (#8B5A2B, #CD853F, #8FBC8F, #BDB76B, #D2B48C, #5D3A1A, #9F7151);
+
+
+
+
+$circle-count: 5;
+
+$animation-delay: 100ms;
+$scale-factor: 0.2;
+
 * {
   margin: 0em;
   padding: 0em;
@@ -6,7 +16,7 @@
 body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   /* background: #403833; */
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-weight: 100;
   color: #f2f2f2;
   font-size: 100%;
@@ -22,7 +32,9 @@ body {
   text-align: center;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -khtml-user-select: none;
   -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   cursor: default;
 }
@@ -61,87 +73,46 @@ body {
   height: 15em;
   transform: rotate(45deg);
   animation: orbit 2s infinite;
-  z-index: 6;
-}
-.circle:nth-child(1) {
-  animation-delay: 0ms;
-  z-index: 5;
-}
-.circle:nth-child(1):after {
-  content: "";
-  position: absolute;
-  width: 2em;
-  height: 2em;
-  border-radius: 100%;
-  background: #8B5A2B;
-  transform: scale(1);
-}
-.circle:nth-child(2) {
-  animation-delay: 100ms;
-  z-index: 4;
-}
-.circle:nth-child(2):after {
-  content: "";
-  position: absolute;
-  width: 2em;
-  height: 2em;
-  border-radius: 100%;
-  background: #CD853F;
-  transform: scale(0.8);
-}
-.circle:nth-child(3) {
-  animation-delay: 200ms;
-  z-index: 3;
-}
-.circle:nth-child(3):after {
-  content: "";
-  position: absolute;
-  width: 2em;
-  height: 2em;
-  border-radius: 100%;
-  background: #8FBC8F;
-  transform: scale(0.6);
-}
-.circle:nth-child(4) {
-  animation-delay: 300ms;
-  z-index: 2;
-}
-.circle:nth-child(4):after {
-  content: "";
-  position: absolute;
-  width: 2em;
-  height: 2em;
-  border-radius: 100%;
-  background: #BDB76B;
-  transform: scale(0.4);
-}
-.circle:nth-child(5) {
-  animation-delay: 400ms;
-  z-index: 1;
-}
-.circle:nth-child(5):after {
-  content: "";
-  position: absolute;
-  width: 2em;
-  height: 2em;
-  border-radius: 100%;
-  background: #D2B48C;
-  transform: scale(0.2);
+  z-index: $circle-count + 1;
+
+  @for $i from 1 through $circle-count {
+    $delay: $animation-delay * ($i - 1);
+    $scale: 1 - ($scale-factor * ($i - 1));
+    $index: $circle-count - $i + 1;
+
+    &:nth-child(#{$i}) {
+      animation-delay: $delay;
+      z-index: $index;
+
+      &:after {
+        content: '';
+        position: absolute;
+        width: 2em;
+        height: 2em;
+        border-radius: 100%;
+        background: nth($circle-colors, $i);
+        transform: scale($scale);
+      }
+    }
+  }
 }
 
 @keyframes orbit {
   0% {
     transform: rotate(45deg);
   }
+
   5% {
     transform: rotate(45deg);
     animation-timing-function: ease-out;
   }
+
   70% {
     transform: rotate(405deg);
     animation-timing-function: ease-in;
   }
+
   100% {
     transform: rotate(405deg);
   }
-}/*# sourceMappingURL=loading.css.map */
+}
