@@ -3,35 +3,26 @@
 <head>
   <title>My Project</title>
 </head>
+<style>
+  body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+</style>
 <body>
   <h1>Welcome to My Project</h1>
   <p>This is the default page for my project.</p>
-  <!-- <ul id="file-list"></ul> -->
+  <H1>CSS</H1>
   <ul>
+    <li><a href="https://supermarpig.github.io/Photo-zoom/">Photo-zoom</a></li>
     <li><a href="Stars/index.html">Stars</a></li>
-    <li><a href="JS-addEventListen/index.html">JS-addEventListen</a></li>
+    <li><a href="CSS-loading/index.html">loading</a></li>
   </ul>
-  <!-- <script>
-    // 取得根目錄下的檔案列表
-    fetch('./')
-      .then(response => response.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const files = Array.from(doc.querySelectorAll('a')).map(link => link.getAttribute('href'));
-
-        const fileList = document.getElementById('file-list');
-        files.forEach(file => {
-          if (file !== '../') {
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = file;
-            link.textContent = file;
-            listItem.appendChild(link);
-            fileList.appendChild(listItem);
-          }
-        });
-      });
-  </script> -->
+  <H1>JS</H1>
+  <ul>
+    <li><a href="JS-addEventListen/index.html">addEventListen</a></li>
+  </ul>
 </body>
 </html>
