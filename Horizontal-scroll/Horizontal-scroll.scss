@@ -1,0 +1,62 @@
+$viewport-width: calc(100vw - 18px);
+$viewport-height: 100vh;
+
+$colors: (
+    1: #f6a2a2,
+    2: #d1d1ff,
+    3: #efefc3,
+    4: #c3e6ef
+);
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+%flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-top {
+    width: $viewport-width;
+    height: $viewport-height;
+    background: #dbf5b9;
+}
+.content {
+    width: $viewport-width;
+    height: $viewport-height;
+    background: #b9f5e0;
+}
+
+.scroll {
+    position: relative;
+    width: $viewport-width;
+}
+
+.sticky {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+}
+
+.scroll-box {
+    display: flex;
+}
+
+@each $index,
+$color in $colors {
+    .scroll-item:nth-child(#{$index}) {
+        background: nth($color, 1);
+        width: $viewport-width;
+        height: $viewport-height;
+        flex-shrink: 0;
+    }
+}
+
+.scroll-item,
+.center {
+    @extend %flex-center;
+}

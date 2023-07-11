@@ -1,0 +1,67 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.scroll-item,
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content-top {
+  width: calc(100vw - 18px);
+  height: 100vh;
+  background: #dbf5b9;
+}
+
+.content {
+  width: calc(100vw - 18px);
+  height: 100vh;
+  background: #b9f5e0;
+}
+
+.scroll {
+  position: relative;
+  width: calc(100vw - 18px);
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.scroll-box {
+  display: flex;
+}
+
+.scroll-item:nth-child(1) {
+  background: #f6a2a2;
+  width: calc(100vw - 18px);
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.scroll-item:nth-child(2) {
+  background: #d1d1ff;
+  width: calc(100vw - 18px);
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.scroll-item:nth-child(3) {
+  background: #efefc3;
+  width: calc(100vw - 18px);
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.scroll-item:nth-child(4) {
+  background: #c3e6ef;
+  width: calc(100vw - 18px);
+  height: 100vh;
+  flex-shrink: 0;
+}/*# sourceMappingURL=Horizontal-scroll.css.map */
