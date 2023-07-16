@@ -1,0 +1,52 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+body {
+  font-family: "Fjalla One", sans-serif;
+  background: linear-gradient(to bottom, #405166, #656f6f 100%);
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 42px;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  transform: rotate(-10deg);
+  display: flex;
+}
+.title span {
+  transform: skew(-10deg);
+  text-shadow: 1px 1px #533d4a, 2px 2px #533d4a, 3px 3px #533d4a,
+    4px 4px #533d4a, 5px 5px #533d4a, 6px 6px #533d4a;
+  opacity: 0;
+  --delay: 0s;
+  animation: move 1s forwards cubic-bezier(0.6, -0.04, 0.37, 1.75) var(--delay);
+}
+@keyframes move {
+  from {
+    opacity: 0;
+    transform: skew(-10deg) translateY(300%);
+  }
+  to {
+    opacity: 1;
+    transform: skew(-10deg) translateY(0%);
+  }
+}
+
+.title:nth-child(1) {
+  color: #e55643;
+}
+.title:nth-child(2) {
+  color: #2b9f5e;
+}
+.title:nth-child(3) {
+  color: #f1c83c;
+}
