@@ -1,0 +1,19 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+.container{
+    height: 500%;
+    display: flex;
+}
+.content{
+    /* background: red; */
+    width: 100%;
+    height:100%;
+}
+.setting {
+  width: 100px;
+  height: 100px;
+}
