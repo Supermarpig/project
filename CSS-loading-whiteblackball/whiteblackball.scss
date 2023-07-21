@@ -10,6 +10,7 @@ $n :36; //小球數量
 $pDeg: 360/$n;
 
 .container {
+    background: #8daebd;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,36 +31,44 @@ $pDeg: 360/$n;
     position: absolute;
     top: 0;
     left: 50%;
-    background-color: red;
+    // background-color: red;
     margin-left: -$ballSize/2;
     margin-top: -$ballSize/2;
     width: $ballSize;
     height: $ballSize;
     transform-origin: center $containerSize/2+$ballSize/2;
 
-    &:nth-child(1) {
+    @for $i from 1 through $n {
+        &:nth-child(#{$i}) {
+            transform: rotate(#{$i * $pDeg}deg);
 
-        transform: rotate(10deg);
+            &::before {
+                content: '';
+                position: absolute;
+                background-color: #000;
+                width: 100%;
+                height: 100%;
+                display: block;
+                top: 100%;
+                border-radius: 50%;
+            }
 
-        // &::before {
-        //     content: '';
-        //     position: absolute;
-        //     background-color: #000;
-        //     width: 100%;
-        //     height: 100%;
-        //     display: block;
-        //     top:100%
-        // }
-
-        // &::after {
-        //     content: '';
-        //     position: absolute;
-        //     background-color: #FFF;
-        //     width: 100%;
-        //     height: 100%;
-        //     display: block;
-        //     top:-100%
-        // }
-
+            &::after {
+                content: '';
+                position: absolute;
+                background-color: #FFF;
+                width: 100%;
+                height: 100%;
+                display: block;
+                top: -100%;
+                border-radius: 50%;
+            }
+        }
     }
+
+
+
+
+
+
 }

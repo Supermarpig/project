@@ -5,6 +5,7 @@ body {
 }
 
 .container {
+  background: #8daebd;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,7 +26,6 @@ body {
   position: absolute;
   top: 0;
   left: 50%;
-  background-color: red;
   margin-left: -5px;
   margin-top: -5px;
   width: 10px;
@@ -34,4 +34,829 @@ body {
 }
 .dot:nth-child(1) {
   transform: rotate(10deg);
+}
+.dot:nth-child(1)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(1)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(2) {
+  transform: rotate(20deg);
+}
+.dot:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(3) {
+  transform: rotate(30deg);
+}
+.dot:nth-child(3)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(3)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(4) {
+  transform: rotate(40deg);
+}
+.dot:nth-child(4)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(4)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(5) {
+  transform: rotate(50deg);
+}
+.dot:nth-child(5)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(5)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(6) {
+  transform: rotate(60deg);
+}
+.dot:nth-child(6)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(6)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(7) {
+  transform: rotate(70deg);
+}
+.dot:nth-child(7)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(7)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(8) {
+  transform: rotate(80deg);
+}
+.dot:nth-child(8)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(8)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(9) {
+  transform: rotate(90deg);
+}
+.dot:nth-child(9)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(9)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(10) {
+  transform: rotate(100deg);
+}
+.dot:nth-child(10)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(10)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(11) {
+  transform: rotate(110deg);
+}
+.dot:nth-child(11)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(11)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(12) {
+  transform: rotate(120deg);
+}
+.dot:nth-child(12)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(12)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(13) {
+  transform: rotate(130deg);
+}
+.dot:nth-child(13)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(13)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(14) {
+  transform: rotate(140deg);
+}
+.dot:nth-child(14)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(14)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(15) {
+  transform: rotate(150deg);
+}
+.dot:nth-child(15)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(15)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(16) {
+  transform: rotate(160deg);
+}
+.dot:nth-child(16)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(16)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(17) {
+  transform: rotate(170deg);
+}
+.dot:nth-child(17)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(17)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(18) {
+  transform: rotate(180deg);
+}
+.dot:nth-child(18)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(18)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(19) {
+  transform: rotate(190deg);
+}
+.dot:nth-child(19)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(19)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(20) {
+  transform: rotate(200deg);
+}
+.dot:nth-child(20)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(20)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(21) {
+  transform: rotate(210deg);
+}
+.dot:nth-child(21)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(21)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(22) {
+  transform: rotate(220deg);
+}
+.dot:nth-child(22)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(22)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(23) {
+  transform: rotate(230deg);
+}
+.dot:nth-child(23)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(23)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(24) {
+  transform: rotate(240deg);
+}
+.dot:nth-child(24)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(24)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(25) {
+  transform: rotate(250deg);
+}
+.dot:nth-child(25)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(25)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(26) {
+  transform: rotate(260deg);
+}
+.dot:nth-child(26)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(26)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(27) {
+  transform: rotate(270deg);
+}
+.dot:nth-child(27)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(27)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(28) {
+  transform: rotate(280deg);
+}
+.dot:nth-child(28)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(28)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(29) {
+  transform: rotate(290deg);
+}
+.dot:nth-child(29)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(29)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(30) {
+  transform: rotate(300deg);
+}
+.dot:nth-child(30)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(30)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(31) {
+  transform: rotate(310deg);
+}
+.dot:nth-child(31)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(31)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(32) {
+  transform: rotate(320deg);
+}
+.dot:nth-child(32)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(32)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(33) {
+  transform: rotate(330deg);
+}
+.dot:nth-child(33)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(33)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(34) {
+  transform: rotate(340deg);
+}
+.dot:nth-child(34)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(34)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(35) {
+  transform: rotate(350deg);
+}
+.dot:nth-child(35)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(35)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
+}
+.dot:nth-child(36) {
+  transform: rotate(360deg);
+}
+.dot:nth-child(36)::before {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: 100%;
+  border-radius: 50%;
+}
+.dot:nth-child(36)::after {
+  content: "";
+  position: absolute;
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  display: block;
+  top: -100%;
+  border-radius: 50%;
 }/*# sourceMappingURL=whiteblackball.css.map */
