@@ -30,4 +30,8 @@ body {
   margin-top: -5px;
   width: 10px;
   height: 10px;
+  transform-origin: center 80px;
+}
+.dot:nth-child(1) {
+  transform: rotate(10deg);
 }/*# sourceMappingURL=whiteblackball.css.map */
