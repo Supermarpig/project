@@ -16,7 +16,6 @@ body {
 .circle {
   width: 150px;
   height: 150px;
-  outline: 1px solid #ddd;
   border-radius: 50%;
   position: relative;
   margin: 50px auto;
