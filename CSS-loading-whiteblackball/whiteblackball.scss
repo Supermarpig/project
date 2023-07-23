@@ -6,8 +6,9 @@ body {
 
 $ballSize: 10px; //小球尺寸
 $containerSize: 150px; //容器尺寸
-$n :36; //小球數量
-$pDeg: 360/$n;
+$n: 36; //小球數量
+$pDeg: 360 / $n;
+$d: 2s; //動畫時間
 
 .container {
     background: #8daebd;
@@ -36,39 +37,77 @@ $pDeg: 360/$n;
     margin-top: -$ballSize/2;
     width: $ballSize;
     height: $ballSize;
-    transform-origin: center $containerSize/2+$ballSize/2;
+    transform-origin: center $containerSize/2 + $ballSize/2;
+    perspective: 70px; //景深
+    transform-style: preserve-3d;
 
     @for $i from 1 through $n {
         &:nth-child(#{$i}) {
             transform: rotate(#{$i * $pDeg}deg);
-
-            &::before {
-                content: '';
-                position: absolute;
-                background-color: #000;
-                width: 100%;
-                height: 100%;
-                display: block;
-                top: 100%;
-                border-radius: 50%;
-            }
-
+            &::before,
             &::after {
-                content: '';
-                position: absolute;
-                background-color: #FFF;
-                width: 100%;
-                height: 100%;
-                display: block;
-                top: -100%;
-                border-radius: 50%;
+                animation-delay: -$d / $n * ($i - 1) * 6; //延遲效果
             }
         }
     }
 
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    &::before {
+        content: "";
+        background-color: #000;
+        top: -100%;
+        animation: rotation-black $d infinite;
 
+        @keyframes rotation-black {
+            0% {
+                animation-timing-function: ease-in;
+            }
+            25% {
+                transform: translate3d(0, 100%, $ballSize); //X軸，Y軸 3D位置
+                animation-timing-function: ease-out;
+            }
+            50% {
+                transform: translate3d(0, 200%, 0);
+                animation-timing-function: ease-in;
+            }
+            75% {
+                transform: translate3d(0, 100%, -$ballSize);
+                animation-timing-function: ease-out;
+            }
+        }
+    }
 
+    &::after {
+        content: "";
+        background-color: #fff;
+        top: 100%;
+        border-radius: 50%;
 
+        animation: rotation-white $d infinite;
 
-
+        @keyframes rotation-white {
+            0% {
+                animation-timing-function: ease-in;
+            }
+            25% {
+                transform: translate3d(0, -100%, -$ballSize); //X軸，Y軸 3D位置
+                animation-timing-function: ease-out;
+            }
+            50% {
+                transform: translate3d(0, -200%, 0);
+                animation-timing-function: ease-in;
+            }
+            75% {
+                transform: translate3d(0, -100%, $ballSize);
+                animation-timing-function: ease-out;
+            }
+        }
+    }
 }
