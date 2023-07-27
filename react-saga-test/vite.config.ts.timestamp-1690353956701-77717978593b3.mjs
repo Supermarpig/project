@@ -1,8 +1,14 @@
 // vite.config.ts
 import { defineConfig } from "file:///E:/Data/react/react-saga-test/node_modules/vite/dist/node/index.js";
 import react from "file:///E:/Data/react/react-saga-test/node_modules/@vitejs/plugin-react/dist/index.mjs";
+import path from 'path';
 var vite_config_default = defineConfig({
-  plugins: [react()]
+  plugins: [react()],
+  resolve: {
+    alias: {
+       '@': path.resolve(__dirname, 'src')
+    }
+ }
 });
 export {
   vite_config_default as default

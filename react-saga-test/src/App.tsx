@@ -22,9 +22,14 @@ function App() {
   return (
     <>
       <div className='container'>
-      <h1>Counter: {counter}</h1>
-      <button onClick={handleIncrement}>Increment</button>
-      <button onClick={handleDecrement}>Decrement</button>
+        <div className='block'>
+          <h1>Counter: {counter}</h1>
+          <button onClick={handleIncrement}>Increment</button>
+          <button onClick={handleDecrement}>Decrement</button>
+        </div>
+        {/* <div className='block'>
+          <h1></h1>
+        </div> */}
       </div>
 
     </>
