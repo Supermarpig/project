@@ -1,31 +1,30 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import './App.css'
 // import fetchAPI from '/src/utils/fetchAPI'
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from './store/store';
+import { increment, decrement } from './store/reducers';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
 
-  // interface dataType {
-  //   // 定義 data 的型別
-  //   id: number;
-  //   name: string;
-  // }
+  const counter = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch();
 
-  // fetchAPI({ url: 'https://tiny-server.zeabur.app/api/getdata' })
-  //   .then((data: dataType) => {
-  //     console.log(data);
-  //   })
-  //   .catch((error: dataType) => {
-  //     console.log('Error:', error);
-  //   });
+  const handleIncrement = () => {
+    dispatch(increment());
+  }
+
+  const handleDecrement = () => {
+    dispatch(decrement());
+  }
 
   return (
     <>
       <div className='container'>
-        <button>A</button>
-        <div>{count}</div>
-        <button>B</button>
-        <div>{count}</div>
+      <h1>Counter: {counter}</h1>
+      <button onClick={handleIncrement}>Increment</button>
+      <button onClick={handleDecrement}>Decrement</button>
       </div>
 
     </>

@@ -1,15 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit'
+// src/store/store.ts
 
+import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from './sagas'; // 在後面的步驟中會創建這個檔案
-import rootReducer from './reducers'; // 在後面的步驟中會創建這個檔案
+import counterReducer  from './reducers';
+import rootSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-    reducer: rootReducer,
+    reducer:{
+        counter: counterReducer, // 此處指定counterReducer為counter的reducer
+      },
     middleware: [sagaMiddleware],
 });
+
 sagaMiddleware.run(rootSaga);
 
 export type AppDispatch = typeof store.dispatch;
