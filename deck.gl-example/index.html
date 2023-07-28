@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>deck.gl Map Example</title>
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0
+        }
+
+        #map {
+            height: 100VH;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        // Mapbox access token
+        mapboxgl.accessToken = 'pk.eyJ1Ijoid2F4MTIzNDUiLCJhIjoiY2xrbTczdGxwMWZreTNkcDR5Mmp4MjF1ZSJ9.KNMuEo9g3rkt1fYH44uVdQ';
+
+        // Initial map configuration
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-74.006, 40.7128], // New York City
+            zoom: 10,
+        });
+
+        // Sample data
+        const data = [
+            { position: [-74.006, 40.7128], name: 'New York City' },
+            { position: [-122.4194, 37.7749], name: 'San Francisco' },
+            { position: [-77.0369, 38.9072], name: 'Washington, D.C.' },
+        ];
+
+        // Create a new deck.gl ScatterplotLayer
+        const layer = new deck.ScatterplotLayer({
+            id: 'scatter-plot',
+            data: data,
+            getPosition: d => d.position,
+            getFillColor: [255, 0, 0], // Red color for all points
+            getRadius: 1000, // Radius of the data points on the map
+        });
+
+        // Add the deck.gl layer to the map
+        deck.setProps({
+            layers: [layer],
+        });
+
+        // Add navigation controls to the map
+        map.addControl(new mapboxgl.NavigationControl());
+    </script>
+</body>
+
+</html>

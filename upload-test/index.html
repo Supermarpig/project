@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>upload-test</title>
+</head>
+
+<body>
+    <!-- <H1> 圖片顯示器</H1> -->
+    <input type="file" webkitdirectory="true" id="my_test">
+    <div id="pics_area">
+    </div>
+
+    <script>
+
+        document.getElementById('my_test').addEventListener('change', function (event) {	//my_test 為觸發運作的按鈕
+            let files = event.target.files;	//選取之目標目錄內的檔案清單
+            let listing = document.getElementById('pics_area');	//(透過id)取得要放置圖片的標籤位置
+
+            for (let i = 0; i < files.length; i++) {
+                let item = document.createElement("img");	//產生圖片標籤
+                item.src = files[i].webkitRelativePath;	//設定圖片的來源位置
+                item.style.padding = "50px 10px 20px 30px"; //排版用
+                listing.appendChild(item);
+                alert(files[i].webkitRelativePath);
+                console.log(files[i].webkitRelativePath);
+            }
+        });
+
+
+    </script>
+
+</body>
+
+</html>
