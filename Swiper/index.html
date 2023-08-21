@@ -54,6 +54,7 @@
         -ms-flex-align: center;
         -webkit-align-items: center;
         align-items: center;
+        z-index: -1;
     }
 
     /*     .swiper-slide:nth-child(2n) {
@@ -83,22 +84,27 @@
         </ul>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
+        <div class="swiper-scrollbar"></div>
     </div>
 
 </body>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var swiper = new Swiper('.swiper-container', {
-            pagination: '.swiper-pagination',
-            slidesPerView: 5,
-            loop: true,
-            paginationClickable: true,
-            spaceBetween: 0,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-        });
+    var swiper = new Swiper('.swiper-container', {
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        slidesPerView: 5,
+        loop: true,
+        autoplay: true,
+        speed: 1000,
+        paginationClickable: true,
+        spaceBetween: 0,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        scrollbar: '.swiper-scrollbar',
     });
 </script>
 
