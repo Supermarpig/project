@@ -9,7 +9,7 @@
 
 <body>
     <!-- <H1> 圖片顯示器</H1> -->
-    <input type="file" webkitdirectory="true" id="my_test">
+    <input type="file" webkitdirectory="true" id="my_test" multiple>
     <div id="pics_area">
     </div>
 
@@ -24,9 +24,11 @@
                 item.src = files[i].webkitRelativePath;	//設定圖片的來源位置
                 item.style.padding = "50px 10px 20px 30px"; //排版用
                 listing.appendChild(item);
-                alert(files[i].webkitRelativePath);
+                // alert(files[i].webkitRelativePath);
                 console.log(files[i].webkitRelativePath);
             }
+
+            console.log(this.files)
         });
 
 
