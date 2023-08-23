@@ -83,7 +83,7 @@
                     const row = table.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
-                    const cell3 = row.insertCell(2); // 新增 cell3
+                    const cell3 = row.insertCell(2);
 
                     cell1.textContent = getLineNumbers(lines, text);
                     cell2.textContent = text;
@@ -162,22 +162,6 @@
 
             return chineseTextArray;
         }
-
-        function getConsole(lines, targetText) {
-
-            for (let i = 0; i < lines.length; i++) {
-                console.log(lines[1])
-                if (lines[i].includes('console')) {
-                    return 'this has console';
-                } else {
-                    return '';
-                }
-            }
-
-
-        }
-
-
 
     </script>
 </body>
