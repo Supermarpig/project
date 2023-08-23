@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>檢查文件</title>
+</head>
+
+<body>
+    <h1>上傳文件及檢查text部分</h1>
+    <input type="file" id="fileInput" accept=".js, .jsx, .ts, .tsx, .html,.ejs" />
+    <div id="result">
+
+    </div>
+
+    <!-- --------------------------------------------------------- -->
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            const fileInput = document.getElementById('fileInput');
+            const resultDiv = document.getElementById('result');
+
+            const file = fileInput.files[0];
+            if (!file) {
+                resultDiv.textContent = '請選擇文件';
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const code = event.target.result;
+                const chineseText = extractChineseTextWithComments(code);
+                const filePath = fileInput.value; //獲取路徑名稱
+
+                // 創建一个HTML表格
+                const table = document.createElement('table');
+                table.border = '1'; // 添加表格
+
+                // 創建表頭
+                const headerRow = table.insertRow();
+                const headerCell1 = headerRow.insertCell(0);
+                const headerCell2 = headerRow.insertCell(1);
+                headerCell1.innerHTML = '<b>第幾行</b>';
+                headerCell2.innerHTML = '<b>文字內容</b>';
+
+                // 新增表格資料
+                const lines = code.split('\n');
+                //去除重複的資料
+                const uniqueChineseText = [...new Set(chineseText)];
+
+                uniqueChineseText.forEach((text, index) => {
+                    const row = table.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    cell1.textContent = getLineNumbers(lines, text);
+                    cell2.textContent = text;
+                });
+
+                // 將表格添加到結果中
+                resultDiv.innerHTML = '';
+                resultDiv.appendChild(table);
+
+                // 顯示文件路徑訊息
+                resultDiv.insertAdjacentHTML('beforebegin', `<p>文件路徑：${filePath}</p>`);
+            };
+
+            reader.readAsText(file);
+        });
+
+        function getLineNumbers(lines, targetText) {
+            const lineNumbers = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].includes(targetText)) {
+                    // 检查是否包含 '//', '/*', '*', '*/'
+                    if (
+                        !lines[i].includes('//') &&
+                        !lines[i].includes('/*') &&
+                        !lines[i].includes('*') &&
+                        !lines[i].includes('*/') &&
+                        lines[i].includes(targetText)
+                    ) {
+                        lineNumbers.push(i + 1); // 將行號添加到array中
+                    }
+                }
+            }
+
+            return lineNumbers;
+        }
+
+        function extractChineseTextWithComments(code) {
+            const chineseTextArray = [];
+            const lines = code.split('\n');
+
+            lines.forEach((line) => {
+                // 檢查是否包含特定註釋的開始結束
+                if (line.includes('/**')) {
+                    line = line.split('/**')[0].trim();
+                }
+                if (line.includes('*/')) {
+                    line = line.split('*/')[0].trim();
+                }
+                if (line.includes('*')) {
+                    line = line.split('*')[0].trim();
+                }
+                // 檢查是否包含特定註釋
+                if (line.includes('//')) {
+                    line = line.split('//')[0].trim();
+                }
+
+
+                // 使用正則選擇中文
+                const chineseMatches = line.match(/[\u4e00-\u9fa5]+/g);
+
+                if (chineseMatches) {
+                    chineseMatches.forEach((match) => {
+                        chineseTextArray.push(match);
+                    });
+                }
+            });
+
+            return chineseTextArray;
+        }
+
+
+
+    </script>
+</body>
+
+</html>
