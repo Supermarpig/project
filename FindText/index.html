@@ -6,6 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>檢查文件</title>
 </head>
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+
+    tr:first-child {
+        background-color: rgb(55, 190, 235);
+        color: white;
+    }
+</style>
 
 <body>
     <h1>上傳文件及檢查text部分</h1>
@@ -41,20 +69,32 @@
                 const headerRow = table.insertRow();
                 const headerCell1 = headerRow.insertCell(0);
                 const headerCell2 = headerRow.insertCell(1);
+                const headerCell3 = headerRow.insertCell(2);
                 headerCell1.innerHTML = '<b>第幾行</b>';
                 headerCell2.innerHTML = '<b>文字內容</b>';
+                headerCell3.innerHTML = '<b>備註</b>';
 
                 // 新增表格資料
                 const lines = code.split('\n');
                 //去除重複的資料
                 const uniqueChineseText = [...new Set(chineseText)];
 
-                uniqueChineseText.forEach((text, index) => {
+                uniqueChineseText.forEach((text) => {
                     const row = table.insertRow();
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2); // 新增 cell3
+
                     cell1.textContent = getLineNumbers(lines, text);
                     cell2.textContent = text;
+
+                    // 检查行是否包含 'console.log'
+                    if (lines.some((line) => line.includes('console.log') && line.includes(text))) {
+                        cell3.textContent = 'console.log';
+                    }
+                    if (lines.some((line) => line.includes('alert') && line.includes(text))) {
+                        cell3.textContent = 'alert';
+                    }
                 });
 
                 // 將表格添加到結果中
@@ -121,6 +161,20 @@
             });
 
             return chineseTextArray;
+        }
+
+        function getConsole(lines, targetText) {
+
+            for (let i = 0; i < lines.length; i++) {
+                console.log(lines[1])
+                if (lines[i].includes('console')) {
+                    return 'this has console';
+                } else {
+                    return '';
+                }
+            }
+
+
         }
 
 
