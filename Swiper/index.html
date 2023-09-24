@@ -97,7 +97,7 @@
         slidesPerView: 5,
         loop: true,
         // autoplay: true,
-        speed: 1000,
+        // speed: 1000,
         paginationClickable: true,
         spaceBetween: 0,
         navigation: {
@@ -105,6 +105,10 @@
             prevEl: ".swiper-button-prev",
         },
         scrollbar: '.swiper-scrollbar',
+          on: {
+            slideChange: function () {
+                console.log(this.realIndex); //輸出真實的頁數
+            },}
     });
 </script>
 
