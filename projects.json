@@ -1,0 +1,97 @@
+[
+  {
+    "name": "Button-Coin",
+    "path": "Button-Coin/index.html",
+    "type": "css"
+  },
+  {
+    "name": "checkAnimation",
+    "path": "checkAnimation/index.html",
+    "type": "css"
+  },
+  {
+    "name": "CSS-loading",
+    "path": "CSS-loading/index.html",
+    "type": "css"
+  },
+  {
+    "name": "CSS-loading-blacksmith",
+    "path": "CSS-loading-blacksmith/index.html",
+    "type": "css"
+  },
+  {
+    "name": "CSS-loading-whiteblackball",
+    "path": "CSS-loading-whiteblackball/index.html",
+    "type": "css"
+  },
+  {
+    "name": "CSS-title-animation",
+    "path": "CSS-title-animation/index.html",
+    "type": "css"
+  },
+  {
+    "name": "deck.gl-example",
+    "path": "deck.gl-example/index.html",
+    "type": "css"
+  },
+  {
+    "name": "FindText",
+    "path": "FindText/index.html",
+    "type": "css"
+  },
+  {
+    "name": "GPT-speech2text",
+    "path": "GPT-speech2text/index.html",
+    "type": "gpt"
+  },
+  {
+    "name": "GSAP-scrollTrigger",
+    "path": "GSAP-scrollTrigger/index.html",
+    "type": "gsap"
+  },
+  {
+    "name": "Horizontal-scroll",
+    "path": "Horizontal-scroll/index.html",
+    "type": "css"
+  },
+  {
+    "name": "JS-addEventListen",
+    "path": "JS-addEventListen/index.html",
+    "type": "js"
+  },
+  {
+    "name": "react-page",
+    "path": "react-page/index.html",
+    "type": "css"
+  },
+  {
+    "name": "react-saga-test",
+    "path": "react-saga-test/index.html",
+    "type": "css"
+  },
+  {
+    "name": "Stars",
+    "path": "Stars/index.html",
+    "type": "css"
+  },
+  {
+    "name": "SVG-threads-loading",
+    "path": "SVG-threads-loading/index.html",
+    "type": "css"
+  },
+  {
+    "name": "Swiper",
+    "path": "Swiper/index.html",
+    "type": "css"
+  },
+  {
+    "name": "TextRain",
+    "path": "TextRain/index.html",
+    "type": "css"
+  },
+  {
+    "name": "upload-test",
+    "path": "upload-test/index.html",
+    "type": "css"
+  }
+]
