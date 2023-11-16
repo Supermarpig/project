@@ -50,16 +50,29 @@
       list-style-type: none;
       padding: 0;
       margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .projects-list li {
+
+      width: 100%;
       display: block;
       background: #112240;
-      margin: 10px 0;
+
+      margin: 10px 0px;
       padding: 20px;
       border-radius: 5px;
       transition: transform 0.3s ease-in-out;
       animation: fadeInUp 1s ease-in-out;
+    }
+
+    @media (min-width: 970px) {
+      .projects-list li {
+        width: 40%;
+        margin: 10px 10px;
+      }
     }
 
     .projects-list li a {
@@ -123,6 +136,12 @@
   </div>
   <div class="main">
     <section class="project-category">
+      <h2>GPT Projects</h2>
+      <ul class="projects-list" id="gpt-projects">
+        <!-- JavaScript will dynamically insert projects here -->
+      </ul>
+    </section>
+    <section class="project-category">
       <h2>CSS Projects</h2>
       <ul class="projects-list" id="css-projects">
         <!-- JavaScript will dynamically insert projects here -->
@@ -142,12 +161,7 @@
         <!-- JavaScript will dynamically insert projects here -->
       </ul>
     </section>
-    <section class="project-category">
-      <h2>GPT Projects</h2>
-      <ul class="projects-list" id="gpt-projects">
-        <!-- JavaScript will dynamically insert projects here -->
-      </ul>
-    </section>
+
   </div>
   <script src="pathFile.js"></script>
 </body>
