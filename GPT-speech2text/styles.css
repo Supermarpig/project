@@ -60,6 +60,9 @@ body {
     background-color: var(--button-hover-bg-color);
 }
 
+.action-buttons {
+    flex-direction: row;
+}
 /* 主題切換樣式 */
 .theme-switch-wrapper {
     display: flex;

@@ -21,6 +21,7 @@
         <div class="input-group">
             <label for="api-key">API Key:</label>
             <input type="text" id="api-key" name="api-key" placeholder="Enter your API key here" required
+            
                 >
         </div>
 
@@ -33,6 +34,8 @@
         <!-- Action Buttons -->
         <div class="input-group action-buttons">
             <button class="button" id="translate-btn">Translate</button>
+            <button id="exportButton">匯出到.txt</button>
+            <a id="downloadLink" style="display: none" download="transcription.txt"></a>
         </div>
 
         <!-- Translation Display -->
