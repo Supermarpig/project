@@ -3,113 +3,61 @@
 
 <head>
     <title>Audio to Text and GPT Summary</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 20px;
-            line-height: 1.6;
-        }
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
 
-        .wrap {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        input[type="text"],
-        #audioInput,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-            /* Include padding and border in the element's width */
-        }
-
-        textarea {
-            height: 150px;
-            resize: vertical;
-        }
-
-        button {
-            background-color: #444;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            float: right;
-            /* Align buttons to the right */
-            clear: both;
-            /* Ensure alignment is consistent */
-        }
-
-        button:hover {
-            background-color: #555;
-        }
-
-        #markdownContent {
-            background-color: white;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            min-height: 100px;
-            clear: both;
-            /* Clear floats for consistent layout */
-        }
-    </style>
 </head>
 
 <body>
-    <div class="wrap">
-        <input id="keyInput" type="text" placeholder="Enter Your GPT api key" />
+    <div class="container">
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+        <!-- API Key Input -->
+        <div class="input-group">
+            <label for="api-key">API Key:</label>
+            <input type="text" id="api-key" name="api-key" placeholder="Enter your API key here" required
+                >
+        </div>
 
-        <br />
-        <input type="file" id="audioInput" accept="audio/*">
-        <button onclick="convertAudioToText()">音頻轉文字</button>
-        <textarea id="textArea" placeholder="Audio to text results..."></textarea>
-        <button onclick="generateGPTSummary()">GPT摘要</button>
-        <div id="markdownContent"></div>
-        <button onclick="exportToMarkdown()">輸出md檔</button>
+        <!-- Audio File Upload -->
+        <div class="input-group">
+            <label for="file-upload">Upload Audio File:</label>
+            <input type="file" id="audioInput" name="file-upload" accept="audio/*" required>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="input-group action-buttons">
+            <button class="button" id="translate-btn">Translate</button>
+        </div>
+
+        <!-- Translation Display -->
+        <div class="input-group">
+            <label for="translation">Translation:</label>
+            <textarea id="translation" name="translation" rows="4" placeholder="Translation will appear here..."
+                readonly></textarea>
+        </div>
+        <div class="input-group action-buttons">
+            <button class="button" id="convert-md-btn">Convert to Markdown</button>
+        </div>
+        <!-- Markdown Output -->
+        <div class="input-group markdown-body">
+            <label for="markdown">Markdown Output:</label>
+            <div data-preview="#preview" id="markdown" name="markdown" rows="4"
+                placeholder="Markdown output will appear here..." readonly></div>
+        </div>
+
     </div>
+    <footer>
+        &copy; 2023 GPT 咒語分享互助會. All rights reserved.
+    </footer>
 
-    <script>
-        // Placeholder for the key, converted text, and markdown content
-        var key = '';
-        var convertedText = '';
-        var markdownContent = '';
-
-        function convertAudioToText() {
-            // Placeholder for audio to text conversion logic
-            // Normally, you'd integrate an external API here
-            convertedText = 'Converted audio text will appear here.';
-            document.getElementById('textArea').value = convertedText;
-        }
-
-        function generateGPTSummary() {
-            // Placeholder for GPT summary logic
-            // Normally, you'd call an API to get the summary
-            markdownContent = '## GPT Summary\nGPT summarized content goes here.';
-            document.getElementById('markdownContent').innerHTML = markdownContent;
-        }
-
-        function exportToMarkdown() {
-            // Function to export the markdown content to a .md file
-            const blob = new Blob([markdownContent], { type: 'text/markdown' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'summary.md';
-            link.click();
-            URL.revokeObjectURL(link.href);
-        }
-    </script>
-
-    <!-- Add any additional styles or scripts here -->
+    <script src="./index.js"></script>
 </body>
+
 
 </html>
