@@ -36,7 +36,8 @@ const transcribeAudio = () => {
     formData.append('model', 'whisper-1')
     formData.append('response_format', 'srt')
 
-
+    const parentElement = document.getElementById('translationLabel')
+    const loadingAnimation = showLoadingAnimation(parentElement);
     axios
         .post('https://api.openai.com/v1/audio/transcriptions', formData, {
             headers: {
@@ -45,13 +46,14 @@ const transcribeAudio = () => {
             }
         })
         .then((response) => {
+            hideLoadingAnimation(loadingAnimation);
             const srtResult = response.data; // 假設API回傳了SRT格式的數據
 
             const formattedText = formatSrtToDisplay(srtResult);
             transcriptionResult.textContent = formattedText; // 這裡可能需要根據SRT格式來進行不同的處理
         })
         .catch((error) => {
-
+            hideLoadingAnimation(loadingAnimation);
             errorMessages.textContent = '轉錄錯誤: ' + error
         })
 }
@@ -67,6 +69,8 @@ const summarizeText = () => {
         return
     }
 
+    const parentElement = document.getElementById('markdown')
+    const loadingAnimation = showLoadingAnimation(parentElement);
     axios.post(
         'https://api.openai.com/v1/chat/completions',
         {
@@ -101,12 +105,13 @@ const summarizeText = () => {
         }
     )
         .then((response) => {
+            hideLoadingAnimation(loadingAnimation);
             const summary = md.render(response.data.choices[0].message.content)
 
             summaryResult.innerHTML = summary
         })
         .catch((error) => {
-
+            hideLoadingAnimation(loadingAnimation);
             errorMessages.textContent = '總結錯誤: ' + error
         })
 }
@@ -168,4 +173,78 @@ document.addEventListener('DOMContentLoaded', function () {
         // 釋放URL對象
         URL.revokeObjectURL(url);
     });
+});
+
+// 創建loading動畫
+function showLoadingAnimation(parentElement) {
+    const loadingAnimation = createLoadingAnimation(parentElement); // 使用你之前创建的函数
+    return loadingAnimation;
+}
+
+// 移除加载动画
+function hideLoadingAnimation(loadingAnimation) {
+    if (loadingAnimation && loadingAnimation.parentNode) {
+        loadingAnimation.parentNode.removeChild(loadingAnimation);
+    }
+}
+
+function createLoadingAnimation(parentElement) {
+    // 创建加载动画容器
+    const loadingAnimation = document.createElement('div');
+    loadingAnimation.className = 'loader'; // 根据你的样式类名设置样式
+
+    // 创建四个点
+    for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'loader-dot'; // 根据你的样式类名设置样式
+        loadingAnimation.appendChild(dot);
+    }
+    // 将加载动画容器添加到指定的父元素中
+    parentElement.appendChild(loadingAnimation);
+
+
+    return loadingAnimation; // 返回加载动画容器元素的引用，以便后续移除
+}
+
+const parentElements = document.getElementsByClassName('testloading'); // 获取所有匹配类名的元素
+
+// 遍历每个匹配的元素并为其创建加载动画
+for (let i = 0; i < parentElements.length; i++) {
+    const parentElement = parentElements[i];
+    const loadingAnimation = createLoadingAnimation(parentElement);
+}
+
+//複製text功能
+const copyButton = document.getElementById('copy-button');
+const translationTextArea = document.getElementById('translation');
+
+copyButton.addEventListener('click', function () {
+    const textToCopy = translationTextArea.value.trim(); // 取得<textarea>中的文本並去除首尾空白
+
+    if (textToCopy === '') {
+        // 如果<textarea>中沒有內容，顯示警告訊息
+        alert('沒有要複製的內容！');
+        return;
+    }
+
+    // 選擇<textarea>中的文本
+    translationTextArea.select();
+
+    // 複製選中的文本到剪貼板
+    document.execCommand('copy');
+
+    // 取消文本選擇狀態
+    window.getSelection().removeAllRanges();
+
+    // 改變按鈕內容為勾勾icon和"已複製"
+    copyButton.innerHTML = '&#10004; 已複製';
+
+    // 禁用按鈕，防止多次點擊
+    copyButton.disabled = true;
+
+    // 過一段時間後恢復按鈕狀態
+    setTimeout(function () {
+        copyButton.innerHTML = '複製錄音內容';
+        copyButton.disabled = false;
+    }, 2000); // 2秒後恢復按鈕狀態
 });

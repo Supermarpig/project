@@ -22,9 +22,7 @@
         <!-- API Key Input -->
         <div class="input-group">
             <label for="api-key">API Key:</label>
-            <input type="text" id="api-key" name="api-key" placeholder="Enter your API key here" required
-            
-                >
+            <input type="text" id="api-key" name="api-key" placeholder="Enter your API key here" required>
         </div>
 
         <!-- Audio File Upload -->
@@ -42,9 +40,12 @@
 
         <!-- Translation Display -->
         <div class="input-group">
-            <label for="translation">Translation:</label>
-            <textarea id="translation" name="translation" rows="4" placeholder="Translation will appear here..."
-                readonly></textarea>
+            <label for="translation" id="translationLabel">Translation:
+                <button id="copy-button">複製錄音內容</button>
+            </label>
+            <textarea id="translation" name="translation" rows="4"
+                placeholder="翻譯結果將顯示在這裡... Translation will appear here..." readonly>
+            </textarea>
         </div>
         <div class="input-group action-buttons">
             <button class="button" id="convert-md-btn">Convert to Markdown</button>
@@ -52,10 +53,9 @@
         <!-- Markdown Output -->
         <div class="input-group markdown-body">
             <label for="markdown">Markdown Output:</label>
-            <div data-preview="#preview" id="markdown" name="markdown" rows="4"
+            <div data-preview="#preview" id="markdown" class="markdown" name="markdown" rows="4"
                 placeholder="Markdown output will appear here..." readonly></div>
         </div>
-
     </div>
     <footer>
         &copy; 2023 GPT 咒語分享互助會. All rights reserved.

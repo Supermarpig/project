@@ -36,7 +36,7 @@ body {
 .input-group input,
 .input-group textarea,
 .input-group button,
-.input-group div {
+.input-group .markdown {
     width: 100%;
     padding: 10px;
     border-radius: 4px;
@@ -63,6 +63,7 @@ body {
 .action-buttons {
     flex-direction: row;
 }
+
 /* 主題切換樣式 */
 .theme-switch-wrapper {
     display: flex;
@@ -178,6 +179,8 @@ footer {
     /* 白色按鈕文字 */
     --button-hover-bg-color: #FF7F50;
     /* 鮭魚色按鈕懸停背景 */
+    --loading-color: #5C3C00;
+
 }
 
 [data-theme='dark'] {
@@ -191,4 +194,41 @@ footer {
     /* 暗棕色按鈕文字 */
     --button-hover-bg-color: #E65100;
     /* 橙色按鈕懸停背景 */
+    --loading-color: #f5f5f5;
+}
+
+/* 加載動畫 */
+.loader {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.loader-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--loading-color);
+    animation: loadingDot 1.4s infinite ease-in-out both;
+}
+
+.loader-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loader-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes loadingDot {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1.0);
+    }
 }
