@@ -46,12 +46,31 @@
         }
 
         .output {
-            margin-top: 10px;
             padding: 10px;
             background: #f7f7f7;
             border: 1px solid #ddd;
             border-radius: 4px;
             display: inline-block;
+        }
+
+        .copy-button {
+            padding: 10px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+
+        .output-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
         }
     </style>
     <script>
@@ -89,6 +108,15 @@
             // 设置输出
             document.getElementById('mixedColorOutput').textContent = mixedColor;
         }
+        function copyToClipboard() {
+                var textToCopy = document.getElementById('mixedColorOutput').textContent;
+                navigator.clipboard.writeText(textToCopy).then(function () {
+                    alert('顏色值已複製到剪貼簿！');
+                })
+                    .catch(function (error) {
+                        alert('複製失敗：', error);
+                    });
+            }
     </script>
 </head>
 
@@ -107,7 +135,10 @@
     <button onclick="mixColors()">混合顏色</button>
 
     <div id="colorPreview"></div>
-    <div class="output" id="mixedColorOutput"></div>
+    <div class="output-container">
+        <div class="output" id="mixedColorOutput"></div>
+        <button class="copy-button" onclick="copyToClipboard()">複製顏色</button>
+    </div>
 
 </body>
 
