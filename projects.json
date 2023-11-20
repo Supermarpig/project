@@ -60,6 +60,11 @@
     "type": "js"
   },
   {
+    "name": "MixColor",
+    "path": "MixColor/index.html",
+    "type": "css"
+  },
+  {
     "name": "react-page",
     "path": "react-page/index.html",
     "type": "css"
