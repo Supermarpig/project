@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat Room</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+
+<body>
+    <div id="chat-container">
+        <div id="user-list">
+            <h3>Online Users: <span id="user-count"></span></h3>
+            <ul id="users"></ul>
+        </div>
+        <div id="message-container">
+            <ul id="messages"></ul>
+            <form id="form" action="">
+                <input id="input" autocomplete="off" placeholder="Enter your message..." />
+                <button>Send</button>
+            </form>
+        </div>
+    </div>
+    <div id="login-container">
+        <form id="login-form" action="">
+            <label for="username">Username:</label>
+            <input type="text" id="username" autocomplete="off" required placeholder="Choose a username" />
+            <label for="apikey">OpenAI API Key:</label>
+            <input type="text" id="apikey" autocomplete="off" required placeholder="Enter your OpenAI API Key" />
+            <button type="submit">Join Chat</button>
+        </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+</body>
+
+</html>
