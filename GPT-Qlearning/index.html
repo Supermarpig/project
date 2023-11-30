@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q-Learning Maze</title>
+    <style>
+        #maze {
+            display: grid;
+            gap: 1px;
+            border: 3px solid #D3D3D3;
+            /* 添加邊框 */
+            /* 添加一些內邊距，使邊框與迷宮格子之間有間隙 */
+            margin: auto;
+            /* 居中迷宮 */
+            max-width: fit-content;
+            /* 確保容器大小適合內容 */
+        }
+
+        .cell {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #D3D3D3;
+            /* 淡灰色邊框 */
+        }
+
+        .wall {
+            background-color: #000000;
+        }
+
+        .start {
+            background-color: #4CAF50;
+        }
+
+        .end {
+            background-color: #FF5722;
+        }
+
+        .agent {
+            background-color: #2196F3;
+        }
+
+        .visited {
+            background-color: #FFEB3B;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="resizeMaze">生成迷宮</button>
+    <button id="Q-Learning">開始Q學習</button>
+    <div id="maze"></div>
+    <div id="qLearningLog"></div>
+
+    <script src="maze.js"></script>
+</body>
+
+</html>
