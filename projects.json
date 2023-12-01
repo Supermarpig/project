@@ -40,6 +40,16 @@
     "type": "css"
   },
   {
+    "name": "GPT-chat",
+    "path": "GPT-chat/index.html",
+    "type": "gpt"
+  },
+  {
+    "name": "GPT-Qlearning",
+    "path": "GPT-Qlearning/index.html",
+    "type": "gpt"
+  },
+  {
     "name": "GPT-speech2text",
     "path": "GPT-speech2text/index.html",
     "type": "gpt"
@@ -60,8 +70,18 @@
     "type": "js"
   },
   {
+    "name": "json-script",
+    "path": "json-script/index.html",
+    "type": "css"
+  },
+  {
     "name": "MixColor",
     "path": "MixColor/index.html",
+    "type": "css"
+  },
+  {
+    "name": "nodeJS-tcpServer",
+    "path": "nodeJS-tcpServer/index.html",
     "type": "css"
   },
   {
