@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="提供測試權杖跟傳訊息">
+    <meta name="summary" content="提供測試權杖跟傳訊息">
+    <title>Line Notify App Test</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <h1>Send LINE Notify Message Test</h1>
+    <form id="notifyForm">
+        <label for="token">ACCESS_TOKEN:</label>
+        <input type="text" id="token" name="token" value="7cUnnHVdhaelQfpGkBUfz72lImL1dUPhVg4AOpbaBpC">
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4"></textarea>
+        <button type="button" onclick="sendNotify()">Send</button>
+
+    </form>
+
+    <script>
+        function sendNotify() {
+            var token = document.getElementById('token').value;
+            var message = document.getElementById('message').value;
+
+            fetch('/sendnotify', { // 修改這裡的 URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'token': token,
+                    'message': message
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Message sent successfully!');
+                    } else {
+                        alert('Failed to send message!');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending the message.');
+                });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+label,
+input,
+textarea,
+button {
+    display: block;
+    /* 使每個元素單獨佔用一行 */
+    margin-bottom: 10px;
+    /* 在元素下方增加間距 */
+}
+
+button {
+    width: auto;
+    /* 重設按鈕的寬度，使其不再佔滿整行 */
+    display: inline-block;
+    /* 讓按鈕只佔用所需空間 */
+}
+
+#notifyForm {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    max-width: 400px;
+    min-width: 350px;
+    margin: 30px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#notifyForm label {
+    color: #555;
+    font-weight: bold;
+}
+
+#notifyForm textarea {
+    padding: 10px;
+}
+
+#notifyForm input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* So padding doesn't affect width */
+}
+
+#notifyForm button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    float: right;
+}
+
+#notifyForm button {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#notifyForm button:hover {
+    background-color: #4cae4c;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+@media (max-width: 768px) {
+    #notifyForm {
+        max-width: 100%;
+        margin: 10px;
+        padding: 15px;
+    }
+
+    #notifyForm input[type="text"],
+    #notifyForm button {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    #notifyForm button {
+        float: none;
+        display: block;
+    }
+}
