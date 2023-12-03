@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pixel Drawing Canvas</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #drawingCanvas {
+            border: 1px solid black;
+            cursor: crosshair;
+        }
+
+        #zoomContainer {
+            width: 200px;
+            /* 容器寬度 */
+            height: 200px;
+            /* 容器高度 */
+            border: 1px solid black;
+            display: grid;
+            grid-template-columns: repeat(100, 1fr);
+            grid-template-rows: repeat(100, 1fr);
+            
+        }
+
+        .zoomCell {
+            border: 1px solid #ddd;
+            min-width: 2px;
+            min-height: 2px;
+        }
+
+        #colorPicker {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="drawingCanvas" width="1024" height="768"></canvas>
+    <div>
+        <div id="zoomContainer"></div>
+        <input type="color" id="colorPicker" value="#000000">
+    </div>
+
+    <script src="draw.js"></script>
+</body>
+
+</html>
