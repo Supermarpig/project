@@ -62,7 +62,7 @@ const summarizeText = () => {
     const summaryResult = document.getElementById('markdown')
     // 假設transcriptionResult.value包含時間戳和文本
     const transcriptionResult = document.getElementById('translation').value;
-    // 使用正則表達式替換時間戳部分為空字串
+    // 使用正則錶達式替換時間戳部分為空字串
     const textWithoutTimestamps = transcriptionResult.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
     if (!textWithoutTimestamps) {
         alert('沒有轉錄文字可總結。')
@@ -121,7 +121,7 @@ document.getElementById('convert-md-btn').addEventListener('click', summarizeTex
 
 
 function formatSrtToDisplay(srtText) {
-    // 使用正則表達式分割每個字幕塊
+    // 使用正則錶達式分割每個字幕塊
     const blocks = srtText.trim().split(/\n\n+/);
 
     // 轉換每個字幕塊為新格式
@@ -129,7 +129,7 @@ function formatSrtToDisplay(srtText) {
         // 分割每一塊的行
         const lines = block.split('\n');
 
-        // 忽略序號，只處理時間戳和字幕文本
+        // 忽略序號，隻處理時間戳和字幕文本
         const times = lines[1];
         const text = lines.slice(2).join(' '); // 如果字幕文本跨多行則合併
 
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
         downloadLink.href = url;
         downloadLink.style.display = 'block';
 
-        // 单击下載鏈接以觸發下載
+        // 單擊下載鏈接以觸發下載
         downloadLink.click();
 
         // 釋放URL對象
@@ -177,11 +177,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // 創建loading動畫
 function showLoadingAnimation(parentElement) {
-    const loadingAnimation = createLoadingAnimation(parentElement); // 使用你之前创建的函数
+    const loadingAnimation = createLoadingAnimation(parentElement); // 使用你之前創建的函數
     return loadingAnimation;
 }
 
-// 移除加载动画
+// 移除加載動畫
 function hideLoadingAnimation(loadingAnimation) {
     if (loadingAnimation && loadingAnimation.parentNode) {
         loadingAnimation.parentNode.removeChild(loadingAnimation);
@@ -189,26 +189,26 @@ function hideLoadingAnimation(loadingAnimation) {
 }
 
 function createLoadingAnimation(parentElement) {
-    // 创建加载动画容器
+    // 創建加載動畫容器
     const loadingAnimation = document.createElement('div');
-    loadingAnimation.className = 'loader'; // 根据你的样式类名设置样式
+    loadingAnimation.className = 'loader'; // 根據你的樣式類名設定樣式
 
-    // 创建四个点
+    // 創建四個點
     for (let i = 0; i < 3; i++) {
         const dot = document.createElement('span');
-        dot.className = 'loader-dot'; // 根据你的样式类名设置样式
+        dot.className = 'loader-dot'; // 根據你的樣式類名設定樣式
         loadingAnimation.appendChild(dot);
     }
-    // 将加载动画容器添加到指定的父元素中
+    // 將加載動畫容器添加到指定的父元素中
     parentElement.appendChild(loadingAnimation);
 
 
-    return loadingAnimation; // 返回加载动画容器元素的引用，以便后续移除
+    return loadingAnimation; // 返回加載動畫容器元素的引用，以便後續移除
 }
 
-const parentElements = document.getElementsByClassName('testloading'); // 获取所有匹配类名的元素
+const parentElements = document.getElementsByClassName('testloading'); // 獲取所有匹配類名的元素
 
-// 遍历每个匹配的元素并为其创建加载动画
+// 遍曆每個匹配的元素並為其創建加載動畫
 for (let i = 0; i < parentElements.length; i++) {
     const parentElement = parentElements[i];
     const loadingAnimation = createLoadingAnimation(parentElement);
@@ -230,7 +230,7 @@ copyButton.addEventListener('click', function () {
     // 選擇<textarea>中的文本
     translationTextArea.select();
 
-    // 複製選中的文本到剪貼板
+    // 複製選中的文本到剪貼闆
     document.execCommand('copy');
 
     // 取消文本選擇狀態
@@ -247,4 +247,26 @@ copyButton.addEventListener('click', function () {
         copyButton.innerHTML = '複製錄音內容';
         copyButton.disabled = false;
     }, 2000); // 2秒後恢復按鈕狀態
+});
+
+let originalSrtText = ''; // 用於保存原始數據
+let timestampsRemoved = false; // 跟蹤時間戳是否被移除
+
+document.addEventListener('DOMContentLoaded', function () {
+    originalSrtText = document.getElementById('translation').value;
+});
+
+function removeBracketsFromText(srtText) {
+    return srtText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/g, '');
+}
+
+document.getElementById('toggle-timestamps').addEventListener('click', function () {
+    if (!timestampsRemoved) {
+        const formattedText = removeBracketsFromText(originalSrtText);
+        document.getElementById('translation').value = formattedText;
+        timestampsRemoved = true;
+    } else {
+        document.getElementById('translation').value = originalSrtText;
+        timestampsRemoved = false;
+    }
 });

@@ -1,7 +1,7 @@
 const net = require('net');
 const readline = require('readline');
 
-const SERVER_IP = '192.168.0.160';
+const SERVER_IP = '10.41.16.64';
 const SERVER_PORT = 80;
 
 const rl = readline.createInterface({
