@@ -10,6 +10,11 @@
     "type": "css"
   },
   {
+    "name": "CSS-draw",
+    "path": "CSS-draw/index.html",
+    "type": "css"
+  },
+  {
     "name": "CSS-loading",
     "path": "CSS-loading/index.html",
     "type": "css"
@@ -32,6 +37,11 @@
   {
     "name": "deck.gl-example",
     "path": "deck.gl-example/index.html",
+    "type": "css"
+  },
+  {
+    "name": "fastgpt",
+    "path": "fastgpt/index.html",
     "type": "css"
   },
   {
@@ -75,8 +85,18 @@
     "type": "css"
   },
   {
+    "name": "location",
+    "path": "location/index.html",
+    "type": "css"
+  },
+  {
     "name": "MixColor",
     "path": "MixColor/index.html",
+    "type": "css"
+  },
+  {
+    "name": "nodeJS-lineNotify",
+    "path": "nodeJS-lineNotify/index.html",
     "type": "css"
   },
   {

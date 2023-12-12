@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>位置信息分享</title>
+</head>
+
+<body>
+    <h2>分享您的位置</h2>
+    <button onclick="getLocation()">共享我的位置</button>
+    <p id="status"></p>
+
+    <script>
+        function getLocation() {
+            document.getElementById('status').textContent = '正在請求位置信息...';
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendPosition(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // 發送數據到後端 API
+            fetch('https://line-bot-dd.onrender.com/receive-location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ lat: lat, lon: lon })
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('status').textContent = '位置信息已成功發送！';
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    document.getElementById('status').textContent = '發送位置信息失敗。';
+                });
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById('status').textContent = "用戶拒絕了位置請求。";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById('status').textContent = "位置信息不可用。";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById('status').textContent = "請求用戶位置超時。";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById('status').textContent = "發生未知錯誤。";
+                    break;
+            }
+        }
+    </script>
+</body>
+
+</html>
