@@ -11,7 +11,7 @@
     <p id="status"></p>
 
     <script>
-        function getLocation() {
+       function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(sendPosition, showError);
@@ -24,6 +24,8 @@
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
+            document.getElementById('status').textContent = '正在發送位置信息...';
+
             fetch('https://line-bot-dd.onrender.com/receive-location', {
                 method: 'POST',
                 headers: {
@@ -35,7 +37,12 @@
                     userId: new URLSearchParams(window.location.search).get('userId')
                 })
             })
-                .then(response => response.json()) // 假設後端會返回 JSON 格式的響應
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('網絡響應不是 OK');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     document.getElementById('status').textContent = '位置信息已成功發送！';
                     console.log(data);
@@ -62,6 +69,7 @@
                     break;
             }
         }
+
     </script>
 </body>
 
