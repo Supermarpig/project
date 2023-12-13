@@ -9,6 +9,8 @@
     <h2>分享您的位置</h2>
     <button onclick="getLocation()">共享我的位置</button>
     <p id="status"></p>
+    <p id="real-location"></p>
+
 
     <script>
        function getLocation() {
@@ -16,7 +18,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(sendPosition, showError);
             } else {
-                document.getElementById('status').textContent = "此瀏覽器不支持地理定位。";
+                document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
             }
         }
 
@@ -25,6 +27,8 @@
             var lon = position.coords.longitude;
 
             document.getElementById('status').textContent = '正在發送位置信息...';
+            // 更新頁面元素以顯示坐標
+            document.getElementById('real-location').textContent = '緯度: ' + lat + ', 經度: ' + lon;
 
             fetch('https://line-bot-dd.onrender.com/receive-location', {
                 method: 'POST',
