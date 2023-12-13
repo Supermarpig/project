@@ -30,6 +30,11 @@
     "type": "css"
   },
   {
+    "name": "CSS-scrollX",
+    "path": "CSS-scrollX/index.html",
+    "type": "css"
+  },
+  {
     "name": "CSS-title-animation",
     "path": "CSS-title-animation/index.html",
     "type": "css"
@@ -85,8 +90,8 @@
     "type": "css"
   },
   {
-    "name": "location",
-    "path": "location/index.html",
+    "name": "Line-location",
+    "path": "Line-location/index.html",
     "type": "css"
   },
   {

@@ -16,7 +16,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(sendPosition, showError);
             } else {
-                alert("Geolocation is not supported by this browser.");
+                document.getElementById('status').textContent = "此瀏覽器不支持地理定位。";
             }
         }
 
@@ -24,15 +24,18 @@
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
-            // 發送數據到後端 API
             fetch('https://line-bot-dd.onrender.com/receive-location', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ lat: lat, lon: lon })
+                body: JSON.stringify({
+                    latitude: lat,
+                    longitude: lon,
+                    userId: new URLSearchParams(window.location.search).get('userId')
+                })
             })
-                .then(response => response.text())
+                .then(response => response.json()) // 假設後端會返回 JSON 格式的響應
                 .then(data => {
                     document.getElementById('status').textContent = '位置信息已成功發送！';
                     console.log(data);
