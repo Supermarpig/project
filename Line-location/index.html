@@ -13,7 +13,7 @@
 
 
     <script>
-       function getLocation() {
+        function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(sendPosition, showError);
@@ -25,10 +25,6 @@
         function sendPosition(position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
-
-            document.getElementById('status').textContent = '正在發送位置信息...';
-            // 更新頁面元素以顯示坐標
-            document.getElementById('real-location').textContent = '緯度: ' + lat + ', 經度: ' + lon;
 
             fetch('https://line-bot-dd.onrender.com/receive-location', {
                 method: 'POST',
@@ -42,14 +38,23 @@
                 })
             })
                 .then(response => {
+                    const contentType = response.headers.get("content-type");
                     if (!response.ok) {
-                        throw new Error('網絡響應不是 OK');
+                        throw new Error('網路響應不是 OK');
+                    } else if (!contentType || !contentType.includes("application/json")) {
+                        return response.text(); // 如果響應不是 JSON，以文本方式處理
                     }
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('status').textContent = '位置信息已成功發送！';
-                    console.log(data);
+                    if (typeof data === 'string') {
+                        // 如果 data 是字符串，表示響應是文本，直接顯示
+                        document.getElementById('status').textContent = data;
+                    } else {
+                        // 否則，處理 JSON 數據
+                        document.getElementById('status').textContent = '位置信息已成功發送！';
+                        console.log(data);
+                    }
                 })
                 .catch((error) => {
                     console.error('Error:', error);
