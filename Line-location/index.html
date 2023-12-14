@@ -70,18 +70,23 @@
     <script>
 
         window.onload = function () {
-            setTimeout(() => {
-                getLocation();
-            }, 1000);
-        };
+            // 定義要執行的操作次數
+            let count = 0;
+            const maxCount = 10; // 持續10次，即10分鐘
 
-        function getLocation() {
-            document.getElementById('status').textContent = '正在請求位置信息...';
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendPosition, showError);
-            } else {
-                document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
+            // 定義一個函數來執行您想要的操作
+            function repeatFunction() {
+                if (count < maxCount) {
+                    getLocation();
+                    count++;
+                } else {
+                    clearInterval(intervalId); // 停止重複執行
+                    // 這裡可以添加完成後的處理代碼
+                }
             }
+
+            // 每分鐘執行一次
+            const intervalId = setInterval(repeatFunction, 60000);
             // // 當位置共享完成後，跳轉回 LINE
             // redirectToLine();
         }
