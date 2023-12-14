@@ -4,6 +4,61 @@
 <head>
     <title>位置信息分享</title>
 </head>
+<style>
+    body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        padding: 0 10px;
+        /* 添加邊距以防止元素貼近邊緣 */
+    }
+
+
+    button {
+        width: 300px;
+        /* 設置固定寬度 */
+        height: 300px;
+        /* 設置固定高度 */
+        line-height: 300px;
+        /* 使文字垂直居中 */
+        border: none;
+        border-radius: 50%;
+        /* 完全圓形 */
+        background-color: #e4c6a1;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.3s;
+        margin-top: 20px;
+    }
+
+    button:hover {
+        transform: scale(1.2);
+        /* 懸停時放大 */
+    }
+
+    #status,
+    #real-location {
+        margin-top: 50px;
+    }
+
+    @media (max-width: 768px) {
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+    }
+</style>
 
 <body>
     <h2>分享您的位置</h2>
@@ -13,6 +68,11 @@
 
 
     <script>
+
+        window.onload = function () {
+            getLocation();
+        };
+
         function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
             if (navigator.geolocation) {
@@ -20,11 +80,22 @@
             } else {
                 document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
             }
+            // 當位置共享完成後，跳轉回 LINE
+            redirectToLine();
+        }
+
+        function redirectToLine() {
+            // 使用 LINE 的深度鏈接來跳轉回 LINE
+            // 這裡需要根據您的需求修改 URL
+            window.location.href = 'line://';
         }
 
         function sendPosition(position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
+
+            document.getElementById('real-location').textContent = `緯度: ${lat}   , 經度: ${lon}`
+
 
             fetch('https://line-bot-dd.onrender.com/receive-location', {
                 method: 'POST',
