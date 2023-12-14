@@ -70,23 +70,21 @@
     <script>
 
         window.onload = function () {
-            // 定義要執行的操作次數
             let count = 0;
-            const maxCount = 10; // 持續10次，即10分鐘
+            const maxCount = 3;
 
-            // 定義一個函數來執行您想要的操作
             function repeatFunction() {
                 if (count < maxCount) {
                     getLocation();
                     count++;
+                    setTimeout(repeatFunction, 5000); // 下次執行
                 } else {
-                    clearInterval(intervalId); // 停止重複執行
-                    // 這裡可以添加完成後的處理代碼
+                    // 完成所有執行
                 }
             }
 
-            // 每分鐘執行一次
-            const intervalId = setInterval(repeatFunction, 60000);
+            repeatFunction(); // 初始調用
+
             // // 當位置共享完成後，跳轉回 LINE
             // redirectToLine();
         }
