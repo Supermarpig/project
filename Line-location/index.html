@@ -82,15 +82,15 @@
             } else {
                 document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
             }
-            // 當位置共享完成後，跳轉回 LINE
-            redirectToLine();
+            // // 當位置共享完成後，跳轉回 LINE
+            // redirectToLine();
         }
 
-        function redirectToLine() {
-            // 使用 LINE 的深度鏈接來跳轉回 LINE
-            // 這裡需要根據您的需求修改 URL
-            window.location.href = 'line://';
-        }
+        // function redirectToLine() {
+        //     // 使用 LINE 的深度鏈接來跳轉回 LINE
+        //     // 這裡需要根據您的需求修改 URL
+        //     window.location.href = 'line://';
+        // }
 
         function sendPosition(position) {
             var lat = position.coords.latitude;
