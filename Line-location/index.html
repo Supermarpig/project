@@ -3,6 +3,8 @@
 
 <head>
     <title>位置信息分享</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <style>
     body {
@@ -10,8 +12,8 @@
         font-family: Arial, sans-serif;
         padding: 0 10px;
         /* 添加邊距以防止元素貼近邊緣 */
+        height: 100%;
     }
-
 
     button {
         width: 300px;
@@ -36,9 +38,38 @@
         /* 懸停時放大 */
     }
 
-    #status,
-    #real-location {
+    #status {
         margin-top: 50px;
+    }
+
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+
+    #real-location {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        /* 添加邊框 */
+        padding: 10px;
+        max-height: 200px;
+        /* 設定最大高度 */
+        overflow-y: auto;
+        /* 超出部分可滾動 */
+        background-color: #f9f9f9;
+        /* 背景顔色 */
+        font-size: 0.9em;
+        /* 字體大小 */
+    }
+
+    #real-location p {
+        margin: 5px 0;
+        /* 段落間距 */
+        padding: 5px;
+        background-color: #eef;
+        /* 段落背景顔色 */
+        border-radius: 5px;
+        /* 圓角邊框 */
     }
 
     @media (max-width: 768px) {
@@ -65,11 +96,18 @@
     <button onclick="getLocation()">共享我的位置</button>
     <p id="status"></p>
     <p id="real-location"></p>
-
+    <div id="map"></div> <!-- 地圖容器 -->
 
     <script>
 
-       window.onload = function () {
+        var map = L.map('map').setView([0, 0], 13); // 初始化地圖
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        var markers = []; // 存儲所有標記的數組
+
+        window.onload = function () {
             let count = 0;
             const maxCount = 10;
 
@@ -77,7 +115,7 @@
                 if (count < maxCount) {
                     getLocation();
                     count++;
-                    setTimeout(repeatFunction, 60000); // 預定下一次執行
+                    setTimeout(repeatFunction, 10000); // 預定下一次執行
                 } else {
                     // 完成所有執行
                 }
@@ -89,25 +127,34 @@
         function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendPosition, showError);
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    var timestamp = new Date(position.timestamp).toLocaleString(); // 獲取時間戳並轉換為在地時間字符串
+                    addMarker(lat, lon); // 添加新標記
+                    sendPositionToServer(lat, lon); // 將位置信息發送到服務器
+
+                    // 更新實際位置列錶顯示，包括時間戳
+                    var locationList = document.getElementById('real-location');
+                    locationList.innerHTML += `<p>時間: ${timestamp}, 緯度: ${lat}, 經度: ${lon}</p>`;
+                }, showError);
             } else {
                 document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
             }
-            // // 當位置共享完成後，跳轉回 LINE
-            // redirectToLine();
         }
 
-        // function redirectToLine() {
-        //     // 使用 LINE 的深度鏈接來跳轉回 LINE
-        //     // 這裡需要根據您的需求修改 URL
-        //     window.location.href = 'line://';
-        // }
 
-        function sendPosition(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
+        // 添加標記的函數
+        function addMarker(lat, lon) {
+            var marker = L.marker([lat, lon]).addTo(map);
+            markers.push(marker); // 將新標記添加到數組
+            if (markers.length === 1) {
+                map.setView([lat, lon], 13); // 僅在第一次添加標記時更新地圖的中心點
+            }
+        }
+        function sendPositionToServer(lat, lon) {
 
-            document.getElementById('real-location').textContent = `緯度: ${lat}   , 經度: ${lon}`
+            // document.getElementById('real-location').textContent = `緯度: ${lat}   , 經度: ${lon}`
 
 
             fetch('https://line-bot-dd.onrender.com/receive-location', {
@@ -132,7 +179,7 @@
                 })
                 .then(data => {
                     if (typeof data === 'string') {
-                        // 如果 data 是字符串，表示響應是文本，直接顯示
+                        // 如果 data 是字符串，錶示響應是文本，直接顯示
                         document.getElementById('status').textContent = data;
                     } else {
                         // 否則，處理 JSON 數據
