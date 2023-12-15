@@ -116,7 +116,11 @@
         function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                    enableHighAccuracy: true,
+                    timeout: 10000, // 10秒超時
+                    maximumAge: 60000 // 60秒的位置緩存
+                });
             } else {
                 document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
             }
