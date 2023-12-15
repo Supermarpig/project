@@ -97,12 +97,12 @@
     <p id="status"></p>
 
     <script>
-        var map = L.map('map').setView([0, 0], 13); // 初始化地圖
+        let map = L.map('map').setView([0, 0], 13); // 初始化地圖
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        var markers = []; // 存儲所有標記的數組
+        let markers = []; // 存儲所有標記的數組
 
         // 初始調用位置獲取
         window.onload = function () {
@@ -110,8 +110,22 @@
         };
 
         // 定期獲取位置
-        setInterval(getLocation, 300000); // 每5min獲取一次位置
+        let locationInterval;
 
+        // 開始定期獲取位置
+        function startLocationTracking() {
+            // 每5分鐘調用一次getLocation
+            locationInterval = setInterval(getLocation, 300000); // 300000毫秒 = 5分鐘
+
+            // 設置一個定時器，在一小時後停止獲取位置
+            setTimeout(function () {
+                clearInterval(locationInterval);
+                document.getElementById('status').textContent = '已停止定期獲取位置信息。';
+            }, 3600000); // 3600000毫秒 = 1小時
+        }
+
+        // 在需要開始追踪位置時調用這個函數
+        startLocationTracking();
         // 獲取位置的函數
         function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
@@ -128,20 +142,20 @@
 
         // 顯示位置信息並添加標記
         function showPosition(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            var timestamp = new Date(position.timestamp).toLocaleString(); // 獲取時間戳並轉換為在地時間字符串
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            let timestamp = new Date(position.timestamp).toLocaleString(); // 獲取時間戳並轉換為在地時間字符串
             addMarker(lat, lon); // 添加新標記
             sendPositionToServer(lat, lon); // 將位置信息發送到服務器
 
             // 更新位置信息顯示
-            var locationList = document.getElementById('real-location');
+            let locationList = document.getElementById('real-location');
             locationList.innerHTML += `<p>時間: ${timestamp}, 緯度: ${lat}, 經度: ${lon}</p>`;
         }
 
         // 添加標記的函數
         function addMarker(lat, lon) {
-            var marker = L.marker([lat, lon]).addTo(map);
+            let marker = L.marker([lat, lon]).addTo(map);
             markers.push(marker); // 將新標記添加到數組
             if (markers.length === 1) {
                 map.setView([lat, lon], 16); // 僅在第一次添加標記時更新地圖的中心點
@@ -150,7 +164,7 @@
 
         // 處理地理位置錯誤的函數
         function showError(error) {
-            var message = "";
+            let message = "";
             switch (error.code) {
                 case error.PERMISSION_DENIED:
                     message = "用戶拒絕了位置請求。";
