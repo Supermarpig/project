@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'gpt':
                         projectList = document.getElementById('gpt-projects');
                         break;
+                    case 'line':
+                        projectList = document.getElementById('line-projects');
+                        break;
                     default:
                         console.error('未知的專案類型:', project.type);
                         return;

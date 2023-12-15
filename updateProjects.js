@@ -18,11 +18,17 @@ fs.readdir(projectsDirectory, { withFileTypes: true }, (err, entries) => {
             let type;
             if (dir.name.startsWith('JS-')) {
                 type = 'js';
-            } else if (dir.name.startsWith('GSAP-')) {
+            }
+            else if (dir.name.startsWith('GSAP-')) {
                 type = 'gsap';
-            } else if (dir.name.startsWith('GPT-')) {
+            }
+            else if (dir.name.startsWith('GPT-')) {
                 type = 'gpt';
-            } else {
+            }
+            else if (dir.name.startsWith('Line-')) {
+                type = 'line';
+            }
+            else {
                 type = 'css';
             }
 
