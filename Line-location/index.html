@@ -11,35 +11,39 @@
         text-align: center;
         font-family: Arial, sans-serif;
         padding: 0 10px;
-        /* 添加邊距以防止元素貼近邊緣 */
         height: 100%;
+        background-color: #FFF5E1;
+        /* 暖色背景 */
     }
 
     button {
-        width: 300px;
-        /* 設置固定寬度 */
-        height: 300px;
-        /* 設置固定高度 */
-        line-height: 300px;
-        /* 使文字垂直居中 */
+        width: 280px;
+        height: 280px;
+        line-height: 280px;
         border: none;
         border-radius: 50%;
-        /* 完全圓形 */
-        background-color: #e4c6a1;
+        background-color: #FFA07A;
+        /* 暖色按鈕 */
         color: white;
         font-size: 24px;
         cursor: pointer;
         transition: transform 0.3s;
         margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     button:hover {
-        transform: scale(1.2);
-        /* 懸停時放大 */
+        transform: scale(1.1);
+    }
+
+    button:active {
+        transform: scale(0.9);
     }
 
     #status {
         margin-top: 50px;
+        color: #404040;
+        /* 暗色文字，更好的可讀性 */
     }
 
     #map {
@@ -50,26 +54,20 @@
     #real-location {
         margin-top: 20px;
         border: 1px solid #ddd;
-        /* 添加邊框 */
         padding: 10px;
         max-height: 200px;
-        /* 設定最大高度 */
         overflow-y: auto;
-        /* 超出部分可滾動 */
-        background-color: #f9f9f9;
-        /* 背景顔色 */
+        background-color: #FFF8DC;
+        /* 暖色背景 */
         font-size: 0.9em;
-        /* 字體大小 */
     }
 
     #real-location p {
         margin: 5px 0;
-        /* 段落間距 */
         padding: 5px;
-        background-color: #eef;
-        /* 段落背景顔色 */
+        background-color: #FFDEAD;
+        /* 暖色段落背景 */
         border-radius: 5px;
-        /* 圓角邊框 */
     }
 
     @media (max-width: 768px) {
@@ -94,12 +92,11 @@
 <body>
     <h2>分享您的位置</h2>
     <button onclick="getLocation()">共享我的位置</button>
-    <p id="status"></p>
-    <p id="real-location"></p>
     <div id="map"></div> <!-- 地圖容器 -->
+    <p id="real-location"></p>
+    <p id="status"></p>
 
     <script>
-
         var map = L.map('map').setView([0, 0], 13); // 初始化地圖
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -107,42 +104,36 @@
         }).addTo(map);
         var markers = []; // 存儲所有標記的數組
 
+        // 初始調用位置獲取
         window.onload = function () {
-            let count = 0;
-            const maxCount = 10;
-
-            function repeatFunction() {
-                if (count < maxCount) {
-                    getLocation();
-                    count++;
-                    setTimeout(repeatFunction, 10000); // 預定下一次執行
-                } else {
-                    // 完成所有執行
-                }
-            }
-
-            repeatFunction(); // 初始調用
+            getLocation(); // 立即獲取一次位置
         };
 
+        // 定期獲取位置
+        setInterval(getLocation, 300000); // 每5min獲取一次位置
+
+        // 獲取位置的函數
         function getLocation() {
             document.getElementById('status').textContent = '正在請求位置信息...';
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var lat = position.coords.latitude;
-                    var lon = position.coords.longitude;
-                    var timestamp = new Date(position.timestamp).toLocaleString(); // 獲取時間戳並轉換為在地時間字符串
-                    addMarker(lat, lon); // 添加新標記
-                    sendPositionToServer(lat, lon); // 將位置信息發送到服務器
-
-                    // 更新實際位置列錶顯示，包括時間戳
-                    var locationList = document.getElementById('real-location');
-                    locationList.innerHTML += `<p>時間: ${timestamp}, 緯度: ${lat}, 經度: ${lon}</p>`;
-                }, showError);
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
             } else {
                 document.getElementById('status').textContent = "此瀏覽器不支援地理定位。";
             }
         }
 
+        // 顯示位置信息並添加標記
+        function showPosition(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            var timestamp = new Date(position.timestamp).toLocaleString(); // 獲取時間戳並轉換為在地時間字符串
+            addMarker(lat, lon); // 添加新標記
+            sendPositionToServer(lat, lon); // 將位置信息發送到服務器
+
+            // 更新位置信息顯示
+            var locationList = document.getElementById('real-location');
+            locationList.innerHTML += `<p>時間: ${timestamp}, 緯度: ${lat}, 經度: ${lon}</p>`;
+        }
 
         // 添加標記的函數
         function addMarker(lat, lon) {
@@ -152,11 +143,29 @@
                 map.setView([lat, lon], 13); // 僅在第一次添加標記時更新地圖的中心點
             }
         }
+
+        // 處理地理位置錯誤的函數
+        function showError(error) {
+            var message = "";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    message = "用戶拒絕了位置請求。";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "位置信息不可用。";
+                    break;
+                case error.TIMEOUT:
+                    message = "請求用戶位置超時。";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    message = "發生未知錯誤。";
+                    break;
+            }
+            document.getElementById('status').textContent = message;
+        }
+
+        // 將位置信息發送到服務器的函數
         function sendPositionToServer(lat, lon) {
-
-            // document.getElementById('real-location').textContent = `緯度: ${lat}   , 經度: ${lon}`
-
-
             fetch('https://line-bot-dd.onrender.com/receive-location', {
                 method: 'POST',
                 headers: {
@@ -168,48 +177,23 @@
                     userId: new URLSearchParams(window.location.search).get('userId')
                 })
             })
-                .then(response => {
-                    const contentType = response.headers.get("content-type");
-                    if (!response.ok) {
-                        throw new Error('網路響應不是 OK');
-                    } else if (!contentType || !contentType.includes("application/json")) {
-                        return response.text(); // 如果響應不是 JSON，以文本方式處理
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (typeof data === 'string') {
-                        // 如果 data 是字符串，錶示響應是文本，直接顯示
-                        document.getElementById('status').textContent = data;
-                    } else {
-                        // 否則，處理 JSON 數據
-                        document.getElementById('status').textContent = '位置信息已成功發送！';
-                        console.log(data);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    document.getElementById('status').textContent = '發送位置信息失敗。';
-                });
+                .then(handleResponse)
+                .catch(handleError);
         }
 
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    document.getElementById('status').textContent = "用戶拒絕了位置請求。";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    document.getElementById('status').textContent = "位置信息不可用。";
-                    break;
-                case error.TIMEOUT:
-                    document.getElementById('status').textContent = "請求用戶位置超時。";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    document.getElementById('status').textContent = "發生未知錯誤。";
-                    break;
+        // 處理服務器響應的函數
+        function handleResponse(response) {
+            if (!response.ok) {
+                throw new Error('網路響應不是 OK');
             }
+            return response.json();
         }
 
+        // 處理錯誤的函數
+        function handleError(error) {
+            console.error('Error:', error);
+            document.getElementById('status').textContent = '發送位置信息失敗。';
+        }
     </script>
 </body>
 
