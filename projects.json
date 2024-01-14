@@ -40,19 +40,9 @@
     "type": "css"
   },
   {
-    "name": "fastgpt",
-    "path": "fastgpt/index.html",
-    "type": "css"
-  },
-  {
     "name": "FindText",
     "path": "FindText/index.html",
     "type": "css"
-  },
-  {
-    "name": "GPT-chat",
-    "path": "GPT-chat/index.html",
-    "type": "gpt"
   },
   {
     "name": "GPT-Qlearning",
@@ -102,11 +92,6 @@
   {
     "name": "nodeJS-tcpServer",
     "path": "nodeJS-tcpServer/index.html",
-    "type": "css"
-  },
-  {
-    "name": "react-page",
-    "path": "react-page/index.html",
     "type": "css"
   },
   {
