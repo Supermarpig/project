@@ -297,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ctx = canvas.getContext('2d');
     const audioPlayer = document.getElementById('audioPlayer');
     const currentTimeDisplay = document.getElementById('currentTime');
+    const totalTimeElement = document.getElementById('totalTime');
     let audioDuration = 0; // 音頻總時長
 
     const togglePlayButton = document.getElementById('togglePlayButton');
@@ -330,6 +331,26 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         reader.readAsArrayBuffer(file);
     });
+
+    audioPlayer.addEventListener('loadedmetadata', function () {
+        if (audioPlayer.duration === Infinity) {
+            // 嘗試設定播放時間到文件的一個預估值，強製瀏覽器計算時長
+            audioPlayer.currentTime = 10000000 * Math.random();
+        } else {
+            updateTotalTime(audioPlayer.duration);
+        }
+    });
+    
+    audioPlayer.addEventListener('durationchange', function () {
+        updateTotalTime(audioPlayer.duration);
+    });
+    
+    function updateTotalTime(duration) {
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        totalTimeElement.textContent = `  /  ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    }
+    
 
     audioPlayer.addEventListener('timeupdate', function () {
         const currentTime = audioPlayer.currentTime;
