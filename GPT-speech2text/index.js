@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     exportButton.addEventListener('click', function () {
         // 獲取轉錄文本
-        const transcriptionText = transcriptionDiv ? transcriptionDiv.textContent : '';
+        const transcriptionText = transcriptionDiv ? transcriptionDiv.value : '';
 
         // 檢查是否有轉錄文本
         if (!transcriptionText.trim()) {
@@ -163,8 +163,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // 創建URL以下載文件
         const url = URL.createObjectURL(blob);
 
+        // 生成文件名：格式為 "Transcription_YYYY-MM-DD_HHMMSS.txt"
+        const date = new Date();
+        const fileName = `Transcription_${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}.txt`;
+
         // 設置下載鏈接的URL和文件名
         downloadLink.href = url;
+        downloadLink.download = fileName; // 設定下載文件的文件名
         downloadLink.style.display = 'block';
 
         // 單擊下載鏈接以觸發下載
@@ -256,17 +261,167 @@ document.addEventListener('DOMContentLoaded', function () {
     originalSrtText = document.getElementById('translation').value;
 });
 
-function removeBracketsFromText(srtText) {
-    return srtText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/g, '');
-}
 
-document.getElementById('toggle-timestamps').addEventListener('click', function () {
-    if (!timestampsRemoved) {
-        const formattedText = removeBracketsFromText(originalSrtText);
-        document.getElementById('translation').value = formattedText;
-        timestampsRemoved = true;
-    } else {
-        document.getElementById('translation').value = originalSrtText;
-        timestampsRemoved = false;
+
+
+//切換時間格式
+document.addEventListener('DOMContentLoaded', function () {
+    const removeTimestampsButton = document.getElementById('remove-timestamps');
+    const translationTextArea = document.getElementById('translation');
+    let timestampsVisible = true;
+    // 保存原始轉錄文本的副本
+    let originalText = translationTextArea.value; // 在頁麵加載時就獲取和保存原始文本
+
+    removeTimestampsButton.addEventListener('click', function () {
+        if (timestampsVisible) {
+            // 隱藏時間戳記
+            let textWithoutTimestamps = originalText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/g, '');
+            translationTextArea.value = textWithoutTimestamps;
+            removeTimestampsButton.innerText = '顯示時間格式';
+        } else {
+            // 恢復時間戳記，即使用保存的原始文本
+            translationTextArea.value = originalText; // 使用保存的原始文本恢復
+            removeTimestampsButton.innerText = '隱藏時間格式';
+        }
+
+        timestampsVisible = !timestampsVisible;
+    });
+});
+
+// 處理音樂上傳聲波功能
+
+let globalBuffer;
+document.addEventListener('DOMContentLoaded', function () {
+    const audioInput = document.getElementById('audioInput');
+    const canvas = document.getElementById('waveform');
+    const ctx = canvas.getContext('2d');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const currentTimeDisplay = document.getElementById('currentTime');
+    let audioDuration = 0; // 音頻總時長
+
+    const togglePlayButton = document.getElementById('togglePlayButton');
+
+    togglePlayButton.addEventListener('click', function () {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            togglePlayButton.textContent = '播放';
+        } else {
+            audioPlayer.pause();
+            togglePlayButton.textContent = '暫停';
+        }
+    });
+
+    audioInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        const audioUrl = URL.createObjectURL(file);
+        audioPlayer.src = audioUrl;
+        audioPlayer.load();
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioContext.decodeAudioData(e.target.result, function (buffer) {
+                audioDuration = buffer.duration;
+                drawWaveform(buffer);
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    });
+
+    audioPlayer.addEventListener('timeupdate', function () {
+        const currentTime = audioPlayer.currentTime;
+        const minutes = Math.floor(currentTime / 60);
+        const seconds = Math.floor(currentTime % 60);
+        currentTimeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+        // 重新繪製波形並添加進度指示
+        drawProgressIndicator(currentTime / audioDuration);
+    });
+    // canvas.addEventListener('click', function () {
+    //     if (audioPlayer.paused) {
+    //         audioPlayer.play();
+    //     } else {
+    //         audioPlayer.pause();
+    //     }
+    // });
+
+    let isDragging = false;
+
+    canvas.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        // 可選：在用戶開始拖拽時暫停音頻播放
+        audioPlayer.pause();
+    });
+
+    canvas.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+            // 實時更新播放進度的視覺反饋（可選）
+            const progress = e.offsetX / canvas.offsetWidth;
+            drawProgressIndicator(progress);
+        }
+    });
+
+    canvas.addEventListener('mouseup', function (e) {
+        if (isDragging) {
+            const progress = e.offsetX / canvas.offsetWidth;
+            const newTime = progress * audioPlayer.duration;
+            audioPlayer.currentTime = newTime; // 更新音頻播放時間
+            audioPlayer.play(); // 拖拽結束後立即開始播放
+            isDragging = false;
+        }
+    });
+
+    canvas.addEventListener('mouseleave', function (e) {
+        // 當滑鼠離開canvas時停止拖拽
+        isDragging = false;
+    });
+
+    function drawWaveform(buffer) {
+        globalBuffer = buffer; // 存儲音頻緩沖區以便稍後重新繪製進度
+        const data = buffer.getChannelData(0);
+        const step = Math.ceil(data.length / canvas.width);
+        const amp = canvas.height / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < canvas.width; i++) {
+            let min = 1.0;
+            let max = -1.0;
+            for (let j = 0; j < step; j++) {
+                const datum = data[(i * step) + j];
+                if (datum < min) min = datum;
+                if (datum > max) max = datum;
+            }
+            // 預設顔色
+            ctx.fillStyle = "#BBB";
+            ctx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+        }
     }
+    function drawProgressIndicator(progressRatio) {
+        const data = globalBuffer.getChannelData(0);
+        const step = Math.ceil(data.length / canvas.width);
+        const amp = canvas.height / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < canvas.width; i++) {
+            let min = 1.0;
+            let max = -1.0;
+            for (let j = 0; j < step; j++) {
+                const datum = data[(i * step) + j];
+                if (datum < min) min = datum;
+                if (datum > max) max = datum;
+            }
+            // 根據進度設定顔色
+            ctx.fillStyle = i < canvas.width * progressRatio ? "rgba(0, 150, 0, 0.5)" : "#BBB";
+            ctx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+        }
+    }
+    // 監聽播放進度更新，重新繪製波形
+    audioPlayer.addEventListener('timeupdate', function () {
+        const currentTime = audioPlayer.currentTime;
+        drawProgressIndicator(currentTime / audioDuration);
+        // 更新播放時間的代碼...
+    });
 });

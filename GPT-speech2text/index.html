@@ -22,13 +22,24 @@
         <!-- API Key Input -->
         <div class="input-group">
             <label for="api-key">API Key:</label>
-            <input type="text" id="api-key" name="api-key" placeholder="Enter your API key here" required>
+            <input type="text" id="api-key" name="api-key" placeholder="Enter your API key here" required
+                value="">
         </div>
 
         <!-- Audio File Upload -->
         <div class="input-group">
-            <label for="file-upload">Upload Audio File:</label>
+            <label for="audioInput">Upload Audio File:</label>
             <input type="file" id="audioInput" name="file-upload" accept="audio/*" required>
+        </div>
+
+        <!-- Canvas for Waveform Display -->
+        <div class="input-group">
+            <canvas id="waveform" width="800" height="150" style="border:1px solid #000;"></canvas>
+            <audio id="audioPlayer" controls style="display:none;"></audio>
+        </div>
+        <div class="input-group audio-stop">
+            <button id="togglePlayButton" >播放 / 暫停</button>
+            <p id="currentTime"></p>
         </div>
 
         <!-- Action Buttons -->
@@ -45,9 +56,8 @@
                 <button id="remove-timestamps">切換時間格式</button>
             </label>
             <textarea id="translation" name="translation" rows="4"
-            placeholder="翻譯結果將顯示在這裡... Translation will appear here..." readonly>
-             </textarea>
-            
+                placeholder="翻譯結果將顯示在這裡... Translation will appear here..." readonly></textarea>
+
         </div>
         <div class="input-group action-buttons">
             <button class="button" id="convert-md-btn">Convert to Markdown</button>
@@ -60,7 +70,7 @@
         </div>
     </div>
     <footer>
-        &copy; 2023 GPT 咒語分享互助會. All rights reserved.
+        &copy;2024 享隆和他的好朋友們互助協會
     </footer>
 
     <script src="./index.js"></script>
