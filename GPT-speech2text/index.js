@@ -50,7 +50,7 @@ const transcribeAudio = () => {
             const srtResult = response.data; // 假設API回傳了SRT格式的數據
 
             const formattedText = formatSrtToDisplay(srtResult);
-            transcriptionResult.textContent = formattedText; // 這裡可能需要根據SRT格式來進行不同的處理
+            transcriptionResult.innerHTML = formattedText; // 這裡可能需要根據SRT格式來進行不同的處理
         })
         .catch((error) => {
             hideLoadingAnimation(loadingAnimation);
@@ -61,9 +61,10 @@ const transcribeAudio = () => {
 const summarizeText = () => {
     const summaryResult = document.getElementById('markdown')
     // 假設transcriptionResult.value包含時間戳和文本
-    const transcriptionResult = document.getElementById('translation').value;
+    const transcriptionDiv = document.getElementById('translation');
+    const transcriptionText = transcriptionDiv.textContent || transcriptionDiv.innerText;
     // 使用正則錶達式替換時間戳部分為空字串
-    const textWithoutTimestamps = transcriptionResult.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
+    const textWithoutTimestamps = transcriptionText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
     if (!textWithoutTimestamps) {
         alert('沒有轉錄文字可總結。')
         return
@@ -87,8 +88,8 @@ const summarizeText = () => {
     5. Proficient in using markdown tables to collect information and help users better understand the target information.
     6. If the user does not specify any language, then default to using Chinese for the reply.
     7. Please do not worry about your response being interrupted, try to output your reasoning process as much as possible.
-    8. 請對以下內容進行分析，分析以下內容重點。並用繁體中文回覆。
-    9. 並透過後設提問提供思維的收束，嘗試在回覆中找到多個論點，並統整這些論點，整理成一份markdown回覆。
+    8. 請對以下內容進行分析,分析以下內容重點。並用繁體中文回覆。
+    9. 並透過後設提問提供思維的收束,嘗試在回覆中找到多個論點,並統整這些論點,整理成一份markdown回覆。
     `
                 },
                 {
@@ -116,8 +117,8 @@ const summarizeText = () => {
         })
 }
 
-document.getElementById('translate-btn').addEventListener('click', transcribeAudio)
 document.getElementById('convert-md-btn').addEventListener('click', summarizeText)
+document.getElementById('translate-btn').addEventListener('click', transcribeAudio)
 
 
 function formatSrtToDisplay(srtText) {
@@ -137,9 +138,12 @@ function formatSrtToDisplay(srtText) {
         const [start, end] = times.split(' --> ').map(time => time.substr(0, 8));
 
         // 構建新格式的字串
-        return `[${start} - ${end}]:${text}`;
+        // return `[${start} - ${end}]:${text}`;
+        // 這裡使用HTML元素和data-*屬性來存儲時間戳
+        return `<div class="transcript-block" data-start="${start}" data-end="${end}">[${start} - ${end}]: ${text}</div>`;
     }).join('\n');
 }
+
 
 //下載txt檔案
 document.addEventListener('DOMContentLoaded', function () {
@@ -149,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     exportButton.addEventListener('click', function () {
         // 獲取轉錄文本
-        const transcriptionText = transcriptionDiv ? transcriptionDiv.value : '';
+        const transcriptionText = transcriptionDiv ? transcriptionDiv.textContent : ''; // 使用textContent獲取<div>中的文本
 
         // 檢查是否有轉錄文本
         if (!transcriptionText.trim()) {
@@ -167,18 +171,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = new Date();
         const fileName = `Transcription_${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}.txt`;
 
-        // 設置下載鏈接的URL和文件名
+        // 設定下載鏈接的URL和文件名
         downloadLink.href = url;
         downloadLink.download = fileName; // 設定下載文件的文件名
         downloadLink.style.display = 'block';
 
-        // 單擊下載鏈接以觸發下載
+        // 點選下載鏈接以觸發下載
         downloadLink.click();
 
         // 釋放URL對象
         URL.revokeObjectURL(url);
     });
 });
+
 
 // 創建loading動畫
 function showLoadingAnimation(parentElement) {
@@ -221,25 +226,23 @@ for (let i = 0; i < parentElements.length; i++) {
 
 //複製text功能
 const copyButton = document.getElementById('copy-button');
-const translationTextArea = document.getElementById('translation');
+const translationDiv = document.getElementById('translation'); // 假設這是一個<div>
 
 copyButton.addEventListener('click', function () {
-    const textToCopy = translationTextArea.value.trim(); // 取得<textarea>中的文本並去除首尾空白
+    const textToCopy = translationDiv.textContent || translationDiv.innerText; // 從<div>中獲取文本
 
-    if (textToCopy === '') {
-        // 如果<textarea>中沒有內容，顯示警告訊息
+    if (!textToCopy.trim()) {
         alert('沒有要複製的內容！');
         return;
     }
 
-    // 選擇<textarea>中的文本
-    translationTextArea.select();
-
-    // 複製選中的文本到剪貼闆
+    // 創建一個臨時的<textarea>元素來選擇和複製文本
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = textToCopy;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
     document.execCommand('copy');
-
-    // 取消文本選擇狀態
-    window.getSelection().removeAllRanges();
+    document.body.removeChild(tempTextArea);
 
     // 改變按鈕內容為勾勾icon和"已複製"
     copyButton.innerHTML = '&#10004; 已複製';
@@ -254,39 +257,37 @@ copyButton.addEventListener('click', function () {
     }, 2000); // 2秒後恢復按鈕狀態
 });
 
-let originalSrtText = ''; // 用於保存原始數據
-let timestampsRemoved = false; // 跟蹤時間戳是否被移除
-
-document.addEventListener('DOMContentLoaded', function () {
-    originalSrtText = document.getElementById('translation').value;
-});
-
 
 
 
 //切換時間格式
 document.addEventListener('DOMContentLoaded', function () {
     const removeTimestampsButton = document.getElementById('remove-timestamps');
-    const translationTextArea = document.getElementById('translation');
-    let timestampsVisible = true;
-    // 保存原始轉錄文本的副本
-    let originalText = translationTextArea.value; // 在頁麵加載時就獲取和保存原始文本
+
+    let timestampsVisible = true; // 初始狀態假設時間戳是可見的
 
     removeTimestampsButton.addEventListener('click', function () {
-        if (timestampsVisible) {
-            // 隱藏時間戳記
-            let textWithoutTimestamps = originalText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/g, '');
-            translationTextArea.value = textWithoutTimestamps;
-            removeTimestampsButton.innerText = '顯示時間格式';
-        } else {
-            // 恢復時間戳記，即使用保存的原始文本
-            translationTextArea.value = originalText; // 使用保存的原始文本恢復
-            removeTimestampsButton.innerText = '隱藏時間格式';
-        }
+        const transcriptBlocks = document.querySelectorAll('.transcript-block');
 
-        timestampsVisible = !timestampsVisible;
+        transcriptBlocks.forEach(block => {
+            if (timestampsVisible) {
+                // 移除時間戳
+                const textWithoutTimestamp = block.textContent.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/, '').trim();
+                block.textContent = textWithoutTimestamp;
+            } else {
+                // 恢復時間戳，使用data-*屬性
+                const start = block.getAttribute('data-start');
+                const end = block.getAttribute('data-end');
+                const originalText = `[${start} - ${end}]:${block.textContent.trim()}`;
+                block.textContent = originalText;
+            }
+        });
+
+        timestampsVisible = !timestampsVisible; // 切換狀態
+        removeTimestampsButton.innerText = timestampsVisible ? '隱藏時間格式' : '顯示時間格式';
     });
 });
+
 
 // 處理音樂上傳聲波功能
 
@@ -340,34 +341,16 @@ document.addEventListener('DOMContentLoaded', function () {
             updateTotalTime(audioPlayer.duration);
         }
     });
-    
+
     audioPlayer.addEventListener('durationchange', function () {
         updateTotalTime(audioPlayer.duration);
     });
-    
+
     function updateTotalTime(duration) {
         const minutes = Math.floor(duration / 60);
         const seconds = Math.floor(duration % 60);
         totalTimeElement.textContent = `  /  ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     }
-    
-
-    audioPlayer.addEventListener('timeupdate', function () {
-        const currentTime = audioPlayer.currentTime;
-        const minutes = Math.floor(currentTime / 60);
-        const seconds = Math.floor(currentTime % 60);
-        currentTimeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-
-        // 重新繪製波形並添加進度指示
-        drawProgressIndicator(currentTime / audioDuration);
-    });
-    // canvas.addEventListener('click', function () {
-    //     if (audioPlayer.paused) {
-    //         audioPlayer.play();
-    //     } else {
-    //         audioPlayer.pause();
-    //     }
-    // });
 
     let isDragging = false;
 
@@ -442,7 +425,40 @@ document.addEventListener('DOMContentLoaded', function () {
     // 監聽播放進度更新，重新繪製波形
     audioPlayer.addEventListener('timeupdate', function () {
         const currentTime = audioPlayer.currentTime;
+        const minutes = Math.floor(currentTime / 60);
+        const seconds = Math.floor(currentTime % 60);
+        currentTimeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+        // 重新繪製波形並添加進度指示
         drawProgressIndicator(currentTime / audioDuration);
-        // 更新播放時間的代碼...
+
+        // 同時更新逐字稿文本顔色
+        const transcriptBlocks = document.querySelectorAll('.transcript-block');
+        transcriptBlocks.forEach(block => {
+            const start = convertTimeToSeconds(block.getAttribute('data-start'));
+            const end = convertTimeToSeconds(block.getAttribute('data-end'));
+            if (currentTime >= start && currentTime <= end) {
+                block.classList.add('playing');
+            } else {
+                block.classList.remove('playing');
+            }
+        });
     });
+
+
 });
+// 假設轉寫結果已被添加到頁面中
+document.getElementById('translation').addEventListener('click', function (event) {
+    if (event.target.classList.contains('transcript-block')) {
+        const start = event.target.getAttribute('data-start');
+        const startTime = convertTimeToSeconds(start);
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.currentTime = startTime;
+        audioPlayer.play();
+    }
+});
+
+function convertTimeToSeconds(time) {
+    const [hours, minutes, seconds] = time.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+}

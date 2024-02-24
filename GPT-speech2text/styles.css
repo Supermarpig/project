@@ -234,3 +234,13 @@ footer {
     transform: scale(1);
   }
 }
+
+/* 播放音樂顏色變換 */
+.transcript-block{
+  margin-bottom: 5px;
+}
+.transcript-block.playing {
+  color: rgba(0, 150, 0, 0.5); /* 播放時的文字顔色 */
+  font-size: 120%; /* 文字放大1.2倍 */
+  font-weight: bold; /* 文字設為粗體 */
+}
