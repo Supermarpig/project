@@ -20,13 +20,48 @@ const getApiKey = () => {
     return apiKey
 }
 
-const transcribeAudio = () => {
+function validateOpenAIKey(apiKey) {
+    return fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return true; // API Key有效
+            } else {
+                return false; // API Key無效
+            }
+        })
+        .catch(error => {
+            console.error('發生錯誤：', error);
+            return false; // 發生錯誤，視為API Key無效
+        });
+}
+
+
+
+const transcribeAudio = async () => {
     const audioInput = document.getElementById('audioInput')
     const transcriptionResult = document.getElementById('translation')
+    const apiKey = getApiKey(); // 從localStorage獲取API Key
 
+    if (!apiKey) {
+        alert('請輸入您的OpenAI的API key');
+        return;
+    }
+
+    // 使用異步方式驗證API Key
+    const isValidKey = await validateOpenAIKey(apiKey);
+    if (!isValidKey) {
+        alert('這個key怪怪的🤕🤒😷，請確認您的key是否能用👹👹👹');
+        return;
+    }
 
     if (!audioInput.files.length) {
-        alert('請先選擇一個音訊檔案。')
+        alert('請先選擇一個音訊檔案📻🎙️🔊📣🎵')
         return
     }
 
@@ -54,7 +89,7 @@ const transcribeAudio = () => {
         })
         .catch((error) => {
             hideLoadingAnimation(loadingAnimation);
-            errorMessages.textContent = '轉錄錯誤: ' + error
+            errorMessages.textContent = '轉錄錯誤😱😱😱: ' + error
         })
 }
 
@@ -66,7 +101,7 @@ const summarizeText = () => {
     // 使用正則錶達式替換時間戳部分為空字串
     const textWithoutTimestamps = transcriptionText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
     if (!textWithoutTimestamps) {
-        alert('沒有轉錄文字可總結。')
+        alert('沒有轉錄文字可總結📃📃📃')
         return
     }
 
@@ -157,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 檢查是否有轉錄文本
         if (!transcriptionText.trim()) {
-            alert('沒有轉錄文字可以下載！');
+            alert('沒有轉錄文字可以下載！🤑🤑🤑');
             return;
         }
 
@@ -232,7 +267,7 @@ copyButton.addEventListener('click', function () {
     const textToCopy = translationDiv.textContent || translationDiv.innerText; // 從<div>中獲取文本
 
     if (!textToCopy.trim()) {
-        alert('沒有要複製的內容！');
+        alert('沒有要複製的內容😍');
         return;
     }
 
