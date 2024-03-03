@@ -20,77 +20,49 @@ const getApiKey = () => {
     return apiKey
 }
 
-function validateOpenAIKey(apiKey) {
-    return fetch('https://api.openai.com/v1/audio/transcriptions', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (response.ok) {
-                return true; // API Key有效
-            } else {
-                return false; // API Key無效
-            }
-        })
-        .catch(error => {
-            console.error('發生錯誤：', error);
-            return false; // 發生錯誤，視為API Key無效
-        });
-}
-
-
-
 const transcribeAudio = async () => {
-    const audioInput = document.getElementById('audioInput')
-    const transcriptionResult = document.getElementById('translation')
-    const apiKey = getApiKey(); // 從localStorage獲取API Key
+    const audioInput = document.getElementById('audioInput');
+    const transcriptionResult = document.getElementById('translation');
+    const apiKey = getApiKey();
 
     if (!apiKey) {
         alert('請輸入您的OpenAI的API key');
         return;
     }
 
-    // 使用異步方式驗證API Key
-    const isValidKey = await validateOpenAIKey(apiKey);
-    if (!isValidKey) {
-        alert('這個key怪怪的🤕🤒😷，請確認您的key是否能用👹👹👹');
+    if (!audioInput.files.length) {
+        alert('請先選擇一個檔案');
         return;
     }
 
-    if (!audioInput.files.length) {
-        alert('請先選擇一個音訊檔案📻🎙️🔊📣🎵')
-        return
-    }
+    const formData = new FormData();
+    formData.append('file', audioInput.files[0]);
+    formData.append('model', 'whisper-1');
+    formData.append('response_format', 'srt');
 
-    const formData = new FormData()
-
-    formData.append('file', audioInput.files[0])
-    formData.append('model', 'whisper-1')
-    formData.append('response_format', 'srt')
-
-    const parentElement = document.getElementById('translationLabel')
+    const parentElement = document.getElementById('translationLabel');
     const loadingAnimation = showLoadingAnimation(parentElement);
-    axios
-        .post('https://api.openai.com/v1/audio/transcriptions', formData, {
+    try {
+        const response = await axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
             headers: {
-                Authorization: `Bearer ${getApiKey()}`,
+                Authorization: `Bearer ${apiKey}`,
                 'Content-Type': 'multipart/form-data'
             }
-        })
-        .then((response) => {
-            hideLoadingAnimation(loadingAnimation);
-            const srtResult = response.data; // 假設API回傳了SRT格式的數據
+        });
 
-            const formattedText = formatSrtToDisplay(srtResult);
-            transcriptionResult.innerHTML = formattedText; // 這裡可能需要根據SRT格式來進行不同的處理
-        })
-        .catch((error) => {
-            hideLoadingAnimation(loadingAnimation);
-            errorMessages.textContent = '轉錄錯誤😱😱😱: ' + error
-        })
+        hideLoadingAnimation(loadingAnimation);
+        const srtResult = response.data;
+        const formattedText = formatSrtToDisplay(srtResult);
+        transcriptionResult.innerHTML = formattedText;
+    } catch (error) {
+        hideLoadingAnimation(loadingAnimation);
+        if (error.response && error.response.status === 401) {
+            alert('API Key無效，請檢查您的Key');
+        } else {
+            alert('轉錄過程中發生錯誤，請檢查您的網路連接和API Key是否正確');
+        }
+        console.error('轉錄錯誤: ', error);
+    }
 }
 
 const summarizeText = () => {
@@ -482,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
-// 假設轉寫結果已被添加到頁面中
+// 假設轉寫結果已被添加到頁麵中
 document.getElementById('translation').addEventListener('click', function (event) {
     if (event.target.classList.contains('transcript-block')) {
         const start = event.target.getAttribute('data-start');
