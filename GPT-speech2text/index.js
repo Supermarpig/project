@@ -57,7 +57,7 @@ const transcribeAudio = async () => {
     } catch (error) {
         hideLoadingAnimation(loadingAnimation);
         if (error.response && error.response.status === 401) {
-            alert('API Key無效，請檢查您的Key');
+            alert('API Key無效🤕🤒😷，請確認您的key是否能用👹👹👹');
         } else {
             alert('轉錄過程中發生錯誤，請檢查您的網路連接和API Key是否正確');
         }
