@@ -1,0 +1,105 @@
+body{
+    background-color: #f4f4f4;
+}
+
+main {
+  font-family: Arial, sans-serif;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+}
+header,footer{
+    display: flex;
+    justify-content: center
+}
+
+#canvas {
+  border: 8px solid #333;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: block;
+    margin: auto;
+    background-color: #fff;
+    border: 2px solid #333;
+    width: 100%; /* 設置為100%，使其寬度隨容器變化 */
+    max-width: 500px; /* 最大寬度仍為500px */
+}
+
+
+#inputItem {
+  margin: 20px;
+  padding: 10px;
+  width: 200px;
+}
+#itemsList {
+  margin: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 150px;
+  overflow-y: auto; /* 如果內容過多，顯示滾動條 */
+  flex-direction: column;
+}
+
+button {
+  padding: 10px 20px;
+  margin-left: 20px;
+  margin-right: 10px;
+  border: none;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+#winner {
+  margin-left: 20px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 200px;
+  text-align: center;
+}
+
+#canvas,
+#winner {
+  vertical-align: top;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes blinkAndGrow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        color: red;
+        font-weight: bold;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+}
+
+#winnerItem {
+    display: none;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid red;
+    border-radius: 5px;
+    background-color: yellow;
+    animation: blinkAndGrow 1s ease-in-out infinite;
+}

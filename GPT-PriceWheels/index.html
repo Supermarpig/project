@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="參與我們的線上抽獎活動，有機會贏得精彩獎品！">
+    <title>精彩抽獎活動 - 贏取您的獎品！</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <header>
+        <h1>歡迎來到抽獎活動</h1>
+    </header>
+    <main>
+        <section id="wheel">
+            <canvas id="canvas" width="500" height="500" aria-label="抽獎輪盤"></canvas>
+        </section>
+        <section>
+            <input type="text" id="inputItem" placeholder="輸入抽獎項目，用逗號分隔">
+            <div id="itemsList" class="center"></div>
+        </section>
+        <section class="center">
+            <button onclick="spin()">開始抽獎</button>
+        </section>
+        <section id="winner">中獎項目: <span id="winnerItem"></span></section>
+    </main>
+    <footer>
+        <p>版權所有 © 抽獎活動</p>
+    </footer>
+</body>
+<script src="./index.js"></script>
+
+</html>

@@ -70,7 +70,7 @@ const summarizeText = () => {
     // 假設transcriptionResult.value包含時間戳和文本
     const transcriptionDiv = document.getElementById('translation');
     const transcriptionText = transcriptionDiv.textContent || transcriptionDiv.innerText;
-    // 使用正則錶達式替換時間戳部分為空字串
+    // 使用正則表達式替換時間戳部分為空字串
     const textWithoutTimestamps = transcriptionText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
     if (!textWithoutTimestamps) {
         alert('沒有轉錄文字可總結📃📃📃')
@@ -129,7 +129,7 @@ document.getElementById('translate-btn').addEventListener('click', transcribeAud
 
 
 function formatSrtToDisplay(srtText) {
-    // 使用正則錶達式分割每個字幕塊
+    // 使用正則表達式分割每個字幕塊
     const blocks = srtText.trim().split(/\n\n+/);
 
     // 轉換每個字幕塊為新格式
@@ -150,7 +150,6 @@ function formatSrtToDisplay(srtText) {
         return `<div class="transcript-block" data-start="${start}" data-end="${end}">[${start} - ${end}]: ${text}</div>`;
     }).join('\n');
 }
-
 
 //下載txt檔案
 document.addEventListener('DOMContentLoaded', function () {
