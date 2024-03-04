@@ -45,6 +45,11 @@
     "type": "css"
   },
   {
+    "name": "GPT-PriceWheels",
+    "path": "GPT-PriceWheels/index.html",
+    "type": "gpt"
+  },
+  {
     "name": "GPT-Qlearning",
     "path": "GPT-Qlearning/index.html",
     "type": "gpt"
