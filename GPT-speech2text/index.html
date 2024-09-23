@@ -28,7 +28,7 @@
         <!-- Audio File Upload -->
         <div class="input-group">
             <label for="file-upload">Upload Audio File:</label>
-            <input type="file" id="audioInput" name="file-upload" accept="audio/*" required>
+            <input type="file" id="audioInput" name="file-upload" accept="audio/*" required multiple>
         </div>
 
         <!-- Action Buttons -->
@@ -45,9 +45,9 @@
                 <button id="remove-timestamps">切換時間格式</button>
             </label>
             <textarea id="translation" name="translation" rows="4"
-            placeholder="翻譯結果將顯示在這裡... Translation will appear here..." readonly>
+                placeholder="翻譯結果將顯示在這裡... Translation will appear here..." readonly>
              </textarea>
-            
+
         </div>
         <div class="input-group action-buttons">
             <button class="button" id="convert-md-btn">Convert to Markdown</button>

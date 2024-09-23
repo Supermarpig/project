@@ -80,11 +80,6 @@
     "type": "js"
   },
   {
-    "name": "json-script",
-    "path": "json-script/index.html",
-    "type": "css"
-  },
-  {
     "name": "Line-location",
     "path": "Line-location/index.html",
     "type": "line"
@@ -92,11 +87,6 @@
   {
     "name": "MixColor",
     "path": "MixColor/index.html",
-    "type": "css"
-  },
-  {
-    "name": "nodeJS-lineNotify",
-    "path": "nodeJS-lineNotify/index.html",
     "type": "css"
   },
   {
@@ -110,18 +100,8 @@
     "type": "css"
   },
   {
-    "name": "react-saga-test",
-    "path": "react-saga-test/index.html",
-    "type": "css"
-  },
-  {
     "name": "Stars",
     "path": "Stars/index.html",
-    "type": "css"
-  },
-  {
-    "name": "SVG-threads-loading",
-    "path": "SVG-threads-loading/index.html",
     "type": "css"
   },
   {
@@ -132,11 +112,6 @@
   {
     "name": "TextRain",
     "path": "TextRain/index.html",
-    "type": "css"
-  },
-  {
-    "name": "upload-test",
-    "path": "upload-test/index.html",
     "type": "css"
   }
 ]
