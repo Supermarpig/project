@@ -85,16 +85,6 @@
     "type": "css"
   },
   {
-    "name": "nodeJS-tcpServer",
-    "path": "nodeJS-tcpServer/index.html",
-    "type": "css"
-  },
-  {
-    "name": "react-saga-test",
-    "path": "react-saga-test/index.html",
-    "type": "css"
-  },
-  {
     "name": "Stars",
     "path": "Stars/index.html",
     "type": "css"
