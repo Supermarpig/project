@@ -77,15 +77,24 @@
                 clickable: true,
             },
             slidesPerView: 5,
-            loop: true,
+            loop: true, 
             spaceBetween: 0,
             navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
             },
+            simulateTouch: true, // 確保啟用滑動手勢
+            allowTouchMove: true, // 確保允許觸控移動
             scrollbar: {
                 el: '.swiper-scrollbar',
             },
+            freeMode: true, // 啟用自由模式
+            mousewheel: {
+                forceToAxis: true, // 僅在水平軸上觸發滑動
+                sensitivity: 0.7, // 調整靈敏度
+                releaseOnEdges: true, // 到達邊緣時釋放滑動
+            },
+            speed: 400, // 過渡速度
             on: {
                 slideChange: function () {
                     console.log(`現在第---${this.realIndex + 1}---個slide😍😍😍`);
