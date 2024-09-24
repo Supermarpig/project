@@ -1,234 +1,246 @@
 /* 基本元素樣式 */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: var(--bg-color);
-    transition: background-color 0.3s ease;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease;
 }
-
+#translation {
+  min-height: 500px;
+}
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    animation: fadeIn 0.5s ease-out forwards;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
 .input-group {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 10px;
-    flex-direction: column;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  flex-direction: column;
+}
+.audio-stop {
+  flex-direction: row;
+  align-items: center;
 }
 
 .input-group label {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .input-group input,
 .input-group textarea,
 .input-group button,
 .input-group .markdown {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 .input-group button {
-    flex-direction: row;
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    padding: 10px;
-    width: 100px;
-    margin-right: 10px;
-    margin-left: 10px;
+  flex-direction: row;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  padding: 10px;
+  width: 100px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .input-group button:hover {
-    background-color: var(--button-hover-bg-color);
+  background-color: var(--button-hover-bg-color);
 }
 
 .action-buttons {
-    flex-direction: row;
+  flex-direction: row;
 }
 
 /* 主題切換樣式 */
 .theme-switch-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
 }
 
 .theme-switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
 }
 
 .theme-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
-input:checked+.slider {
-    background-color: #2196F3;
+input:checked + .slider {
+  background-color: #2196f3;
 }
 
-input:focus+.slider {
-    box-shadow: 0 0 1px #2196F3;
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
 }
 
-input:checked+.slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 
 /* 圓角滑塊 */
 .slider.round {
-    border-radius: 34px;
+  border-radius: 34px;
 }
 
 .slider.round:before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 /* 底部版權註釋樣式 */
 footer {
-    text-align: center;
-    padding: 20px;
-    margin-top: 30px;
-    font-size: 0.8em;
-    color: var(--text-color);
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  font-size: 0.8em;
+  color: var(--text-color);
 }
 
 /* 新增的按鈕浮動動畫 */
 @keyframes floatButton {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
 
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
 
 /* 主題顏色變數定義 */
 :root {
-    --bg-color: #FAF3E0;
-    /* 暖白色背景 */
-    --text-color: #5C3C00;
-    /* 深棕色文字 */
-    --button-bg-color: #FFA07A;
-    /* 淺鮭魚色按鈕背景 */
-    --button-text-color: #fff;
-    /* 白色按鈕文字 */
-    --button-hover-bg-color: #FF7F50;
-    /* 鮭魚色按鈕懸停背景 */
-    --loading-color: #5C3C00;
-
+  --bg-color: #faf3e0;
+  /* 暖白色背景 */
+  --text-color: #5c3c00;
+  /* 深棕色文字 */
+  --button-bg-color: #ffa07a;
+  /* 淺鮭魚色按鈕背景 */
+  --button-text-color: #fff;
+  /* 白色按鈕文字 */
+  --button-hover-bg-color: #ff7f50;
+  /* 鮭魚色按鈕懸停背景 */
+  --loading-color: #5c3c00;
 }
 
-[data-theme='dark'] {
-    --bg-color: #3E2723;
-    /* 暗棕色背景 */
-    --text-color: #FBE9E7;
-    /* 淺粉紅色文字 */
-    --button-bg-color: #FFAB91;
-    /* 淺鮭魚色按鈕背景 */
-    --button-text-color: #3E2723;
-    /* 暗棕色按鈕文字 */
-    --button-hover-bg-color: #E65100;
-    /* 橙色按鈕懸停背景 */
-    --loading-color: #f5f5f5;
+[data-theme="dark"] {
+  --bg-color: #3e2723;
+  /* 暗棕色背景 */
+  --text-color: #fbe9e7;
+  /* 淺粉紅色文字 */
+  --button-bg-color: #ffab91;
+  /* 淺鮭魚色按鈕背景 */
+  --button-text-color: #3e2723;
+  /* 暗棕色按鈕文字 */
+  --button-hover-bg-color: #e65100;
+  /* 橙色按鈕懸停背景 */
+  --loading-color: #f5f5f5;
 }
 
 /* 加載動畫 */
 .loader {
-    display: inline-block;
-    margin-left: 5px;
+  display: inline-block;
+  margin-left: 5px;
 }
 
 .loader-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--loading-color);
-    animation: loadingDot 1.4s infinite ease-in-out both;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--loading-color);
+  animation: loadingDot 1.4s infinite ease-in-out both;
 }
 
 .loader-dot:nth-child(1) {
-    animation-delay: -0.32s;
+  animation-delay: -0.32s;
 }
 
 .loader-dot:nth-child(2) {
-    animation-delay: -0.16s;
+  animation-delay: -0.16s;
 }
 
 @keyframes loadingDot {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
 
-    0%,
-    80%,
-    100% {
-        transform: scale(0);
-    }
+  40% {
+    transform: scale(1);
+  }
+}
 
-    40% {
-        transform: scale(1.0);
-    }
+/* 播放音樂顏色變換 */
+.transcript-block{
+  margin-bottom: 5px;
+}
+.transcript-block.playing {
+  color: rgba(0, 150, 0, 0.5); /* 播放時的文字顔色 */
+  font-size: 120%; /* 文字放大1.2倍 */
+  font-weight: bold; /* 文字設為粗體 */
 }

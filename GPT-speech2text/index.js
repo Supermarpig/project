@@ -16,12 +16,23 @@ const getApiKey = () => {
     return apiKey;
 };
 
-const transcribeAudio = () => {
+    const apiKey = document.getElementById('api-key').value
+    localStorage.setItem('apiKey', apiKey)
+    return apiKey
+}
+
+const transcribeAudio = async () => {
     const audioInput = document.getElementById('audioInput');
     const transcriptionResult = document.getElementById('translation');
+    const apiKey = getApiKey();
+
+    if (!apiKey) {
+        alert('請輸入您的OpenAI的API key');
+        return;
+    }
 
     if (!audioInput.files.length) {
-        alert('請先選擇一個音訊檔案。');
+        alert('請先選擇一個檔案');
         return;
     }
 
@@ -32,33 +43,39 @@ const transcribeAudio = () => {
 
     const parentElement = document.getElementById('translationLabel');
     const loadingAnimation = showLoadingAnimation(parentElement);
-    axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
-        headers: {
-            Authorization: `Bearer ${getApiKey()}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    })
-        .then((response) => {
-            hideLoadingAnimation(loadingAnimation);
-            const srtResult = response.data; // 假設API回傳了SRT格式的數據
-
-            const formattedText = formatSrtToDisplay(srtResult);
-            transcriptionResult.textContent = formattedText; // 這裡可能需要根據SRT格式來進行不同的處理
-        })
-        .catch((error) => {
-            hideLoadingAnimation(loadingAnimation);
-            errorMessages.textContent = '轉錄錯誤: ' + error.message; // 只顯示錯誤訊息
+    try {
+        const response = await axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'multipart/form-data'
+            }
         });
-};
+
+        hideLoadingAnimation(loadingAnimation);
+        const srtResult = response.data;
+        const formattedText = formatSrtToDisplay(srtResult);
+        transcriptionResult.innerHTML = formattedText;
+    } catch (error) {
+        hideLoadingAnimation(loadingAnimation);
+        if (error.response && error.response.status === 401) {
+            alert('API Key無效🤕🤒😷，請確認您的key是否能用👹👹👹');
+        } else {
+            alert('轉錄過程中發生錯誤，請檢查您的網路連接和API Key是否正確');
+        }
+        console.error('轉錄錯誤: ', error);
+    }
+}
 
 const summarizeText = () => {
-    const summaryResult = document.getElementById('markdown');
-    const transcriptionResult = document.getElementById('translation').value;
-    const textWithoutTimestamps = transcriptionResult.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
-
+    const summaryResult = document.getElementById('markdown')
+    // 假設transcriptionResult.value包含時間戳和文本
+    const transcriptionDiv = document.getElementById('translation');
+    const transcriptionText = transcriptionDiv.textContent || transcriptionDiv.innerText;
+    // 使用正則表達式替換時間戳部分為空字串
+    const textWithoutTimestamps = transcriptionText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]/g, '');
     if (!textWithoutTimestamps) {
-        alert('沒有轉錄文字可總結。');
-        return;
+        alert('沒有轉錄文字可總結📃📃📃')
+        return
     }
 
     const parentElement = document.getElementById('markdown');
@@ -79,8 +96,8 @@ const summarizeText = () => {
     5. Proficient in using markdown tables to collect information and help users better understand the target information.
     6. If the user does not specify any language, then default to using Chinese for the reply.
     7. Please do not worry about your response being interrupted, try to output your reasoning process as much as possible.
-    8. 請對以下內容進行分析，分析以下內容重點。並用繁體中文回覆。
-    9. 並透過後設提問提供思維的收束，嘗試在回覆中找到多個論點，並統整這些論點，整理成一份markdown回覆。
+    8. 請對以下內容進行分析,分析以下內容重點。並用繁體中文回覆。
+    9. 並透過後設提問提供思維的收束,嘗試在回覆中找到多個論點,並統整這些論點,整理成一份markdown回覆。
     `
                 },
                 {
@@ -107,10 +124,11 @@ const summarizeText = () => {
         });
 };
 
-document.getElementById('translate-btn').addEventListener('click', transcribeAudio);
-document.getElementById('convert-md-btn').addEventListener('click', summarizeText);
+document.getElementById('convert-md-btn').addEventListener('click', summarizeText)
+document.getElementById('translate-btn').addEventListener('click', transcribeAudio)
 
 function formatSrtToDisplay(srtText) {
+    // 使用正則表達式分割每個字幕塊
     const blocks = srtText.trim().split(/\n\n+/);
 
     return blocks.map(block => {
@@ -120,7 +138,10 @@ function formatSrtToDisplay(srtText) {
 
         const [start, end] = times.split(' --> ').map(time => time.substr(0, 8));
 
-        return `[${start} - ${end}]: ${text}`;
+        // 構建新格式的字串
+        // return `[${start} - ${end}]:${text}`;
+        // 這裡使用HTML元素和data-*屬性來存儲時間戳
+        return `<div class="transcript-block" data-start="${start}" data-end="${end}">[${start} - ${end}]: ${text}</div>`;
     }).join('\n');
 }
 
@@ -130,25 +151,35 @@ document.addEventListener('DOMContentLoaded', function () {
     const downloadLink = document.getElementById('downloadLink');
 
     exportButton.addEventListener('click', function () {
-        const transcriptionText = transcriptionDiv ? transcriptionDiv.textContent : '';
+        // 獲取轉錄文本
+        const transcriptionText = transcriptionDiv ? transcriptionDiv.textContent : ''; // 使用textContent獲取<div>中的文本
 
         if (!transcriptionText.trim()) {
-            alert('沒有轉錄文字可以下載！');
+            alert('沒有轉錄文字可以下載！🤑🤑🤑');
             return;
         }
 
         const blob = new Blob([transcriptionText], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
 
+        // 生成文件名：格式為 "Transcription_YYYY-MM-DD_HHMMSS.txt"
+        const date = new Date();
+        const fileName = `Transcription_${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}.txt`;
+
+        // 設定下載鏈接的URL和文件名
         downloadLink.href = url;
+        downloadLink.download = fileName; // 設定下載文件的文件名
         downloadLink.style.display = 'block';
 
+        // 點選下載鏈接以觸發下載
         downloadLink.click();
 
         URL.revokeObjectURL(url);
     });
 });
 
+
+// 創建loading動畫
 function showLoadingAnimation(parentElement) {
     const loadingAnimation = createLoadingAnimation(parentElement);
     return loadingAnimation;
@@ -182,20 +213,25 @@ for (let i = 0; i < parentElements.length; i++) {
 }
 
 const copyButton = document.getElementById('copy-button');
-const translationTextArea = document.getElementById('translation');
+const translationDiv = document.getElementById('translation'); // 假設這是一個<div>
 
 copyButton.addEventListener('click', function () {
-    const textToCopy = translationTextArea.value.trim();
+    const textToCopy = translationDiv.textContent || translationDiv.innerText; // 從<div>中獲取文本
 
-    if (textToCopy === '') {
-        alert('沒有要複製的內容！');
+    if (!textToCopy.trim()) {
+        alert('沒有要複製的內容😍');
         return;
     }
 
-    translationTextArea.select();
+    // 創建一個臨時的<textarea>元素來選擇和複製文本
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = textToCopy;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
     document.execCommand('copy');
-    window.getSelection().removeAllRanges();
+    document.body.removeChild(tempTextArea);
 
+    // 改變按鈕內容為勾勾icon和"已複製"
     copyButton.innerHTML = '&#10004; 已複製';
     copyButton.disabled = true;
 
@@ -205,24 +241,208 @@ copyButton.addEventListener('click', function () {
     }, 2000);
 });
 
-let originalSrtText = '';
-let timestampsRemoved = false;
 
+
+
+//切換時間格式
 document.addEventListener('DOMContentLoaded', function () {
-    originalSrtText = document.getElementById('translation').value;
+    const removeTimestampsButton = document.getElementById('remove-timestamps');
+
+    let timestampsVisible = true; // 初始狀態假設時間戳是可見的
+
+    removeTimestampsButton.addEventListener('click', function () {
+        const transcriptBlocks = document.querySelectorAll('.transcript-block');
+
+        transcriptBlocks.forEach(block => {
+            if (timestampsVisible) {
+                // 移除時間戳
+                const textWithoutTimestamp = block.textContent.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/, '').trim();
+                block.textContent = textWithoutTimestamp;
+            } else {
+                // 恢復時間戳，使用data-*屬性
+                const start = block.getAttribute('data-start');
+                const end = block.getAttribute('data-end');
+                const originalText = `[${start} - ${end}]:${block.textContent.trim()}`;
+                block.textContent = originalText;
+            }
+        });
+
+        timestampsVisible = !timestampsVisible; // 切換狀態
+        removeTimestampsButton.innerText = timestampsVisible ? '隱藏時間格式' : '顯示時間格式';
+    });
 });
 
-function removeBracketsFromText(srtText) {
-    return srtText.replace(/\[\d{2}:\d{2}:\d{2} - \d{2}:\d{2}:\d{2}\]:/g, '');
-}
 
-document.getElementById('toggle-timestamps').addEventListener('click', function () {
-    if (!timestampsRemoved) {
-        const formattedText = removeBracketsFromText(originalSrtText);
-        document.getElementById('translation').value = formattedText;
-        timestampsRemoved = true;
-    } else {
-        document.getElementById('translation').value = originalSrtText;
-        timestampsRemoved = false;
+// 處理音樂上傳聲波功能
+
+let globalBuffer;
+document.addEventListener('DOMContentLoaded', function () {
+    const audioInput = document.getElementById('audioInput');
+    const canvas = document.getElementById('waveform');
+    const ctx = canvas.getContext('2d');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const currentTimeDisplay = document.getElementById('currentTime');
+    const totalTimeElement = document.getElementById('totalTime');
+    let audioDuration = 0; // 音頻總時長
+
+    const togglePlayButton = document.getElementById('togglePlayButton');
+
+    togglePlayButton.addEventListener('click', function () {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            togglePlayButton.textContent = '播放';
+        } else {
+            audioPlayer.pause();
+            togglePlayButton.textContent = '暫停';
+        }
+    });
+
+    audioInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        const audioUrl = URL.createObjectURL(file);
+        audioPlayer.src = audioUrl;
+        audioPlayer.load();
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioContext.decodeAudioData(e.target.result, function (buffer) {
+                audioDuration = buffer.duration;
+                drawWaveform(buffer);
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    });
+
+    audioPlayer.addEventListener('loadedmetadata', function () {
+        if (audioPlayer.duration === Infinity) {
+            // 嘗試設定播放時間到文件的一個預估值，強製瀏覽器計算時長
+            audioPlayer.currentTime = 10000000 * Math.random();
+        } else {
+            updateTotalTime(audioPlayer.duration);
+        }
+    });
+
+    audioPlayer.addEventListener('durationchange', function () {
+        updateTotalTime(audioPlayer.duration);
+    });
+
+    function updateTotalTime(duration) {
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        totalTimeElement.textContent = `  /  ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    }
+
+    let isDragging = false;
+
+    canvas.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        // 可選：在用戶開始拖拽時暫停音頻播放
+        audioPlayer.pause();
+    });
+
+    canvas.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+            // 實時更新播放進度的視覺反饋（可選）
+            const progress = e.offsetX / canvas.offsetWidth;
+            drawProgressIndicator(progress);
+        }
+    });
+
+    canvas.addEventListener('mouseup', function (e) {
+        if (isDragging) {
+            const progress = e.offsetX / canvas.offsetWidth;
+            const newTime = progress * audioPlayer.duration;
+            audioPlayer.currentTime = newTime; // 更新音頻播放時間
+            audioPlayer.play(); // 拖拽結束後立即開始播放
+            isDragging = false;
+        }
+    });
+
+    canvas.addEventListener('mouseleave', function (e) {
+        // 當滑鼠離開canvas時停止拖拽
+        isDragging = false;
+    });
+
+    function drawWaveform(buffer) {
+        globalBuffer = buffer; // 存儲音頻緩沖區以便稍後重新繪製進度
+        const data = buffer.getChannelData(0);
+        const step = Math.ceil(data.length / canvas.width);
+        const amp = canvas.height / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < canvas.width; i++) {
+            let min = 1.0;
+            let max = -1.0;
+            for (let j = 0; j < step; j++) {
+                const datum = data[(i * step) + j];
+                if (datum < min) min = datum;
+                if (datum > max) max = datum;
+            }
+            // 預設顔色
+            ctx.fillStyle = "#BBB";
+            ctx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+        }
+    }
+    function drawProgressIndicator(progressRatio) {
+        const data = globalBuffer.getChannelData(0);
+        const step = Math.ceil(data.length / canvas.width);
+        const amp = canvas.height / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < canvas.width; i++) {
+            let min = 1.0;
+            let max = -1.0;
+            for (let j = 0; j < step; j++) {
+                const datum = data[(i * step) + j];
+                if (datum < min) min = datum;
+                if (datum > max) max = datum;
+            }
+            // 根據進度設定顔色
+            ctx.fillStyle = i < canvas.width * progressRatio ? "rgba(0, 150, 0, 0.5)" : "#BBB";
+            ctx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+        }
+    }
+    // 監聽播放進度更新，重新繪製波形
+    audioPlayer.addEventListener('timeupdate', function () {
+        const currentTime = audioPlayer.currentTime;
+        const minutes = Math.floor(currentTime / 60);
+        const seconds = Math.floor(currentTime % 60);
+        currentTimeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+        // 重新繪製波形並添加進度指示
+        drawProgressIndicator(currentTime / audioDuration);
+
+        // 同時更新逐字稿文本顔色
+        const transcriptBlocks = document.querySelectorAll('.transcript-block');
+        transcriptBlocks.forEach(block => {
+            const start = convertTimeToSeconds(block.getAttribute('data-start'));
+            const end = convertTimeToSeconds(block.getAttribute('data-end'));
+            if (currentTime >= start && currentTime <= end) {
+                block.classList.add('playing');
+            } else {
+                block.classList.remove('playing');
+            }
+        });
+    });
+
+
+});
+// 假設轉寫結果已被添加到頁麵中
+document.getElementById('translation').addEventListener('click', function (event) {
+    if (event.target.classList.contains('transcript-block')) {
+        const start = event.target.getAttribute('data-start');
+        const startTime = convertTimeToSeconds(start);
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.currentTime = startTime;
+        audioPlayer.play();
     }
 });
+
+function convertTimeToSeconds(time) {
+    const [hours, minutes, seconds] = time.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+}
