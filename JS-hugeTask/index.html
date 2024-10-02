@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>執行多任務</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .task-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .task-section {
+        border: 2px solid #ccc;
+        padding: 20px;
+        text-align: center;
+        background-color: #fff;
+        border-radius: 8px;
+        width: 200px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      .circle {
+        width: 50px;
+        height: 50px;
+        background-color: red;
+        border-radius: 50%;
+        position: relative;
+        animation: move 4s linear infinite;
+      }
+
+      @keyframes move {
+        0% {
+          top: 0;
+          left: 0;
+        }
+        25% {
+          top: 0;
+          left: 150px;
+        }
+        50% {
+          top: 150px;
+          left: 150px;
+        }
+        75% {
+          top: 150px;
+          left: 0;
+        }
+        100% {
+          top: 0;
+          left: 0;
+        }
+      }
+
+      .container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 2px solid black;
+        margin-top: 20px;
+      }
+
+      .time-display {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>點選按鈕，展示五種大量任務執行的方式</h1>
+      <div class="task-container">
+        <div class="task-section">
+          <div class="time-display">
+            執行時間：<span id="syncTime">0</span> ms
+          </div>
+          <button id="syncBtn">同步執行 (syncTask)</button>
+          <div class="container">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <div class="time-display">
+            執行時間：<span id="microTime">0</span> ms
+          </div>
+          <button id="microBtn">微任務 (microTask)</button>
+          <div class="container">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <div class="time-display">
+            執行時間：<span id="macroTime">0</span> ms
+          </div>
+          <button id="macroBtn">其他隊列任務 (macroTask)</button>
+          <div class="container">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <div class="time-display">
+            執行時間：<span id="idleTime">0</span> ms
+          </div>
+          <button id="idleBtn">requestIdleCallback (idleTask)</button>
+          <div class="container">
+            <div class="circle"></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <div class="time-display">
+            執行時間：<span id="rafTime">0</span> ms
+          </div>
+          <button id="rafBtn">requestAnimationFrame (rafTask)</button>
+          <div class="container">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function delay() {
+        const duration = 5;
+        const start = Date.now();
+        while (Date.now() - start < duration) {} // Busy-wait for 5 ms
+      }
+
+      // 設定執行1000個任務
+      const n = 1000;
+      const tasks = new Array(n).fill(delay);
+
+      // 同步執行
+      function syncTask(task) {
+        const start = performance.now(); // 記錄開始時間
+
+        task();
+
+        const end = performance.now(); // 記錄結束時間
+        const timeTaken = end - start; // 計算耗時
+        document.getElementById("syncTime").innerText = timeTaken.toFixed(2); // 顯示耗時
+      }
+
+      // 微任務 (Promise)
+      function microTask(task) {
+        const start = performance.now();
+        Promise.resolve().then(() => {
+          task();
+          const end = performance.now();
+          const timeTaken = end - start;
+          document.getElementById("microTime").innerText = timeTaken.toFixed(2);
+        });
+      }
+
+      // 其他隊列任務 (setTimeout)
+      function macroTask(task) {
+        const start = performance.now();
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            task();
+            resolve;
+            const end = performance.now();
+            const timeTaken = end - start;
+            document.getElementById("macroTime").innerText =
+              timeTaken.toFixed(2);
+          }, 0);
+        });
+      }
+
+      // IdleCallback
+      function idleTask(task) {
+        const start = performance.now();
+        return new Promise((resolve) => {
+          _runTaskIdle(task, () => {
+            const end = performance.now();
+            const timeTaken = end - start;
+            document.getElementById("idleTime").innerText =
+              timeTaken.toFixed(2);
+            resolve();
+          });
+        });
+      }
+
+      // requestAnimationFrame
+      function rafTask(task) {
+        const start = performance.now();
+        return new Promise((resolve) => {
+          _runTaskRaf(task, () => {
+            const end = performance.now();
+            const timeTaken = end - start;
+            document.getElementById("rafTime").innerText =
+              timeTaken.toFixed(2);
+            resolve();
+          });
+        });
+      }
+
+      // 寫一個輔助function 來看任務執行完沒
+      function _runTaskIdle(task, callback) {
+        // 如果這一針還有時間，就執行任務
+        requestIdleCallback((deadline) => {
+          if (deadline.timeRemaining() > 0) {
+            task();
+            callback();
+          } else {
+            _runTaskIdle(task, callback);
+          }
+        });
+      }
+      function _runTaskRaf(task, callback) {
+        const start = Date.now();
+        // 如果這一針還有時間，就執行任務
+        requestAnimationFrame(() => {
+          if (Date.now() - start < 16.6) {
+            task();
+            callback();
+          } else {
+            _runTaskRaf(task, callback);
+          }
+        });
+      }
+
+      // 綁定按鈕事件
+      document
+        .getElementById("syncBtn")
+        .addEventListener(
+          "click",
+          async () => await Promise.all(tasks.map((t) => syncTask(t)))
+        );
+      document
+        .getElementById("microBtn")
+        .addEventListener(
+          "click",
+          async () => await Promise.all(tasks.map((t) => microTask(t)))
+        );
+      document
+        .getElementById("macroBtn")
+        .addEventListener(
+          "click",
+          async () => await Promise.all(tasks.map((t) => macroTask(t)))
+        );
+      document
+        .getElementById("idleBtn")
+        .addEventListener(
+          "click",
+          async () => await Promise.all(tasks.map((t) => idleTask(t)))
+        );
+      document
+        .getElementById("rafBtn")
+        .addEventListener(
+          "click",
+          async () => await Promise.all(tasks.map((t) => rafTask(t)))
+        );
+    </script>
+  </body>
+</html>
