@@ -16,10 +16,6 @@ const getApiKey = () => {
     return apiKey;
 };
 
-    const apiKey = document.getElementById('api-key').value
-    localStorage.setItem('apiKey', apiKey)
-    return apiKey
-}
 
 const transcribeAudio = async () => {
     const audioInput = document.getElementById('audioInput');
