@@ -5,11 +5,6 @@
     "type": "css"
   },
   {
-    "name": "checkAnimation",
-    "path": "checkAnimation/index.html",
-    "type": "css"
-  },
-  {
     "name": "CSS-draw",
     "path": "CSS-draw/index.html",
     "type": "css"
@@ -32,11 +27,6 @@
   {
     "name": "CSS-title-animation",
     "path": "CSS-title-animation/index.html",
-    "type": "css"
-  },
-  {
-    "name": "deck.gl-example",
-    "path": "deck.gl-example/index.html",
     "type": "css"
   },
   {
@@ -75,6 +65,11 @@
     "type": "js"
   },
   {
+    "name": "JS-download",
+    "path": "JS-download/index.html",
+    "type": "js"
+  },
+  {
     "name": "JS-hugeTask",
     "path": "JS-hugeTask/index.html",
     "type": "js"
@@ -90,6 +85,11 @@
     "type": "css"
   },
   {
+    "name": "SVG-threads-loading",
+    "path": "SVG-threads-loading/index.html",
+    "type": "css"
+  },
+  {
     "name": "Stars",
     "path": "Stars/index.html",
     "type": "css"
@@ -102,6 +102,46 @@
   {
     "name": "TextRain",
     "path": "TextRain/index.html",
+    "type": "css"
+  },
+  {
+    "name": "checkAnimation",
+    "path": "checkAnimation/index.html",
+    "type": "css"
+  },
+  {
+    "name": "deck.gl-example",
+    "path": "deck.gl-example/index.html",
+    "type": "css"
+  },
+  {
+    "name": "iphone",
+    "path": "iphone/index.html",
+    "type": "css"
+  },
+  {
+    "name": "json-script",
+    "path": "json-script/index.html",
+    "type": "css"
+  },
+  {
+    "name": "nodeJS-lineNotify",
+    "path": "nodeJS-lineNotify/index.html",
+    "type": "css"
+  },
+  {
+    "name": "nodeJS-tcpServer",
+    "path": "nodeJS-tcpServer/index.html",
+    "type": "css"
+  },
+  {
+    "name": "react-saga-test",
+    "path": "react-saga-test/index.html",
+    "type": "css"
+  },
+  {
+    "name": "upload-test",
+    "path": "upload-test/index.html",
     "type": "css"
   }
 ]
