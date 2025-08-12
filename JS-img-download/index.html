@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>兩張圖片加密/解密（預設可愛貓）</title>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          "Noto Sans TC", Arial, sans-serif;
+        margin: 24px;
+        line-height: 1.5;
+      }
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .img_cover{
+        background-color: #666;
+        padding: 10px;
+        width: 100%;
+      }
+      .btn {
+        padding: 10px 16px;
+        border: 1px solid #444;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .out {
+        white-space: pre-wrap;
+        font-family: ui-monospace, Consolas, monospace;
+        background: #fafafa;
+        border: 1px dashed #ddd;
+        border-radius: 8px;
+        padding: 8px;
+        margin-top: 12px;
+        max-height: 240px;
+        overflow: auto;
+      }
+      .thumbs {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .thumbs img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #eee;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .hint {
+        color: #666;
+        font-size: 0.9em;
+      }
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      a.dl {
+        display: inline-block;
+        margin-right: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>把檔案藏進兩張圖 → 一鍵解密下載</h1>
+      <p class="hint">
+        預設已載入兩張可愛貓照片。先選「要嵌入的檔案」→
+        按【加密（嵌入）】產生兩張圖片；接著按【解密下載】即可把兩張圖合併還原成單一檔（如
+        APK）。
+      </p>
+
+      <div class="card">
+        <div class="thumbs">
+          
+            <div class="hint">圖片 A（預設）</div>
+            <img
+              class="img_cover"
+              id="imgA"
+              src="./img/stego/cuteA_stego.png"
+              alt="封面 A"
+            />
+            <div style="margin: 6px 0 16px">
+              <label>上傳圖片 A（可覆蓋預設）<br />
+                <input type="file" id="coverA" accept="image/*" />
+              </label>
+            </div>
+          
+          
+            <div class="hint">圖片 B（預設）</div>
+            <img
+              class="img_cover"
+              id="imgB"
+              src="./img/stego/cuteB_stego.png"
+              alt="封面 B"
+            />
+            <div style="margin: 6px 0 16px">
+              <label>上傳圖片 B（可覆蓋預設）<br />
+                <input type="file" id="coverB" accept="image/*" />
+              </label>
+            </div>
+          
+        </div>
+
+        <div style="margin-top: 12px">
+          <label
+            >要嵌入的檔案（例如 app.apk 或任意檔案）<br />
+            <input type="file" id="payload" />
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="btnEmbed">加密（嵌入到兩張圖片）</button>
+          <button class="btn" id="btnRecover">解密下載（合併成單一檔）</button>
+        </div>
+
+        <div id="embedDownloads" style="margin-top: 10px"></div>
+        <div class="out" id="log"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      const log = (s) => {
+        const el = document.getElementById("log");
+        el.textContent += s + "\n";
+        el.scrollTop = el.scrollHeight;
+      };
+      const MAGIC = new TextEncoder().encode("APKPART\0"); // 尾段起始標記
+      function bufToHex(u8) {
+        return Array.from(u8)
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+      }
+      async function sha256Hex(u8) {
+        const d = await crypto.subtle.digest("SHA-256", u8);
+        return bufToHex(new Uint8Array(d));
+      }
+      function crc32(arr) {
+        let c = ~0 >>> 0;
+        for (let i = 0; i < arr.length; i++) {
+          c ^= arr[i];
+          for (let k = 0; k < 8; k++) {
+            const m = -(c & 1);
+            c = (c >>> 1) ^ (0xedb88320 & m);
+          }
+        }
+        return ~c >>> 0;
+      }
+      function u32be(n) {
+        const b = new Uint8Array(4);
+        b[0] = (n >>> 24) & 0xff;
+        b[1] = (n >>> 16) & 0xff;
+        b[2] = (n >>> 8) & 0xff;
+        b[3] = n & 0xff;
+        return b;
+      }
+      function concatU8(list) {
+        const len = list.reduce((s, b) => s + b.length, 0);
+        const out = new Uint8Array(len);
+        let off = 0;
+        for (const b of list) {
+          out.set(b, off);
+          off += b.length;
+        }
+        return out;
+      }
+      function appendTail(originalBytes, tailBytes) {
+        const out = new Uint8Array(originalBytes.length + tailBytes.length);
+        out.set(originalBytes, 0);
+        out.set(tailBytes, originalBytes.length);
+        return out;
+      }
+      function buildTail({ index, total, sha256, name, mime, body }) {
+        const header = { v: 1, index, total, sha256, name, mime };
+        const headerBuf = new TextEncoder().encode(JSON.stringify(header));
+        const sep = new Uint8Array([0x00]);
+        const core = concatU8([MAGIC, headerBuf, sep, body]);
+        const c32 = crc32(core);
+        return concatU8([core, u32be(c32)]);
+      }
+      function extractTail(full) {
+        const m = MAGIC;
+        outer: for (let i = full.length - m.length; i >= 0; i--) {
+          for (let j = 0; j < m.length; j++) {
+            if (full[i + j] !== m[j]) continue outer;
+          }
+          const start = i;
+          if (full.length - start < m.length + 1 + 4)
+            throw new Error("尾段結構異常");
+          const crcPos = full.length - 4;
+          const data = full.subarray(start, crcPos);
+          const crcExpected =
+            ((full[crcPos] << 24) |
+              (full[crcPos + 1] << 16) |
+              (full[crcPos + 2] << 8) |
+              full[crcPos + 3]) >>>
+            0;
+          const c = crc32(data);
+          if (c !== crcExpected)
+            throw new Error("CRC32 驗證失敗，檔案可能被改動/壓縮");
+          const afterMagic = data.subarray(m.length);
+          const sepIndex = afterMagic.indexOf(0x00);
+          if (sepIndex < 0) throw new Error("找不到分隔符");
+          const headerBuf = afterMagic.subarray(0, sepIndex);
+          const body = afterMagic.subarray(sepIndex + 1);
+          const headerJson = new TextDecoder().decode(headerBuf);
+          const header = JSON.parse(headerJson);
+          return { header, body };
+        }
+        throw new Error("找不到 MAGIC 標記");
+      }
+      async function imgToBytes(imgEl) {
+        // 若來源為 blob: 物件網址，優先使用快取
+        if (blobUrlToBytes.has(imgEl.src)) {
+          return blobUrlToBytes.get(imgEl.src);
+        }
+        const res = await fetch(imgEl.src, { cache: "no-store" });
+        const ab = await res.arrayBuffer();
+        return new Uint8Array(ab);
+      }
+
+      // 物件網址 → 圖片原始位元組的快取，避免對 blob: 執行 fetch 相容性問題
+      const blobUrlToBytes = new Map();
+
+      function setupCoverUpload(inputId, imgId) {
+        const input = document.getElementById(inputId);
+        const img = document.getElementById(imgId);
+        if (!input || !img) return;
+        input.addEventListener("change", async () => {
+          try {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            if (!file.type.startsWith("image/")) {
+              log("請選擇圖片檔。");
+              return;
+            }
+
+            // 產生預覽並快取位元組
+            const url = URL.createObjectURL(file);
+            const bytes = new Uint8Array(await file.arrayBuffer());
+
+            // 回收舊的物件網址與快取
+            if (img.dataset.blobUrl) {
+              blobUrlToBytes.delete(img.dataset.blobUrl);
+              URL.revokeObjectURL(img.dataset.blobUrl);
+            }
+
+            blobUrlToBytes.set(url, bytes);
+            img.src = url;
+            img.dataset.blobUrl = url;
+
+            // 變更封面後，重置上一輪的嵌入結果
+            lastStego1 = null;
+            lastStego2 = null;
+            lastHeader = null;
+            const dlCtn = document.getElementById("embedDownloads");
+            if (dlCtn) dlCtn.innerHTML = "";
+
+            log(`已選擇封面 ${imgId === "imgA" ? "A" : "B"}：${file.name} (${bytes.length} bytes)`);
+          } catch (e) {
+            console.error(e);
+            log("❌ 錯誤：" + e.message);
+          }
+        });
+      }
+
+      // 若尚未在本頁面產生暫存的隱寫資料，直接以目前兩張圖片作為資料來源
+      async function ensureStegoFromCurrentImages() {
+        if (!lastStego1 || !lastStego2) {
+          const [bytesA, bytesB] = await Promise.all([
+            imgToBytes(document.getElementById("imgA")),
+            imgToBytes(document.getElementById("imgB")),
+          ]);
+          lastStego1 = bytesA;
+          lastStego2 = bytesB;
+        }
+      }
+
+      let lastStego1 = null,
+        lastStego2 = null,
+        lastHeader = null;
+
+      const embedBtn = document.getElementById("btnEmbed");
+      if (embedBtn) {
+        embedBtn.addEventListener("click", async () => {
+          try {
+            document.getElementById("log").textContent = "";
+            document.getElementById("embedDownloads").innerHTML = "";
+            const payload = document.getElementById("payload").files[0];
+            if (!payload) {
+              log("請先選擇要嵌入的檔案（例如 app.apk 或任意檔）。");
+              return;
+            }
+
+            const [bytesA, bytesB] = await Promise.all([
+              imgToBytes(document.getElementById("imgA")),
+              imgToBytes(document.getElementById("imgB")),
+            ]);
+            const payU8 = new Uint8Array(await await payload.arrayBuffer());
+            const sum = await sha256Hex(payU8);
+            log(`原始檔名：${payload.name}`);
+            log(`原始大小：${payU8.length} bytes`);
+            log(`SHA-256：${sum}`);
+
+            const mid = Math.ceil(payU8.length / 2);
+            const part1 = payU8.subarray(0, mid);
+            const part2 = payU8.subarray(mid);
+
+            const tail1 = buildTail({
+              index: 1,
+              total: 2,
+              sha256: sum,
+              name: payload.name,
+              mime: payload.type || "application/octet-stream",
+              body: part1,
+            });
+            const tail2 = buildTail({
+              index: 2,
+              total: 2,
+              sha256: sum,
+              name: payload.name,
+              mime: payload.type || "application/octet-stream",
+              body: part2,
+            });
+
+            lastStego1 = appendTail(bytesA, tail1);
+            lastStego2 = appendTail(bytesB, tail2);
+            lastHeader = {
+              sha256: sum,
+              name: payload.name,
+              mime: payload.type || "application/octet-stream",
+            };
+
+            const url1 = URL.createObjectURL(new Blob([lastStego1]));
+            const url2 = URL.createObjectURL(new Blob([lastStego2]));
+            const ctn = document.getElementById("embedDownloads");
+            const a1 = document.createElement("a");
+            a1.href = url1;
+            a1.download = "cuteA_stego.png";
+            a1.textContent = "下載嵌入圖片 1";
+            a1.className = "dl";
+            const a2 = document.createElement("a");
+            a2.href = url2;
+            a2.download = "cuteB_stego.png";
+            a2.textContent = "下載嵌入圖片 2";
+            a2.className = "dl";
+            ctn.append(a1, a2);
+
+            log(
+              "✅ 加密（嵌入）完成！你可以下載兩張圖片，或直接按「解密下載」。"
+            );
+          } catch (e) {
+            console.error(e);
+            log("❌ 錯誤：" + e.message);
+          }
+        });
+      }
+
+      document
+        .getElementById("btnRecover")
+        .addEventListener("click", async () => {
+          try {
+            await ensureStegoFromCurrentImages();
+            const t1 = extractTail(lastStego1);
+            const t2 = extractTail(lastStego2);
+            if (t1.header.total !== 2 || t2.header.total !== 2)
+              throw new Error("分片總數不是 2");
+            if (t1.header.sha256 !== t2.header.sha256)
+              throw new Error("兩張圖片的 SHA 標記不一致");
+
+            const parts = [t1, t2].sort(
+              (a, b) => a.header.index - b.header.index
+            );
+            const merged = new Uint8Array(
+              parts[0].body.length + parts[1].body.length
+            );
+            merged.set(parts[0].body, 0);
+            merged.set(parts[1].body, parts[0].body.length);
+
+            const sha = await sha256Hex(merged);
+            log(`期望 SHA-256：${t1.header.sha256}`);
+            log(`實際 SHA-256：${sha}`);
+            if (sha !== t1.header.sha256)
+              throw new Error("還原檔案之 SHA-256 不符，檔案可能受損");
+
+            const outName = t1.header.name || lastHeader?.name || "payload.bin";
+            const outMime =
+              t1.header.mime || lastHeader?.mime || "application/octet-stream";
+            const blob = new Blob([merged], { type: outMime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = outName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            log(`✅ 已解密並下載：${outName}`);
+          } catch (e) {
+            console.error(e);
+            log("❌ 錯誤：" + e.message);
+          }
+        });
+
+      // 綁定覆蓋圖片上傳功能
+      setupCoverUpload("coverA", "imgA");
+      setupCoverUpload("coverB", "imgB");
+    </script>
+  </body>
+</html>
