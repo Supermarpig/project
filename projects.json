@@ -1,5 +1,10 @@
 [
   {
+    "name": ".vscode",
+    "path": ".vscode/index.html",
+    "type": "css"
+  },
+  {
     "name": "Button-Coin",
     "path": "Button-Coin/index.html",
     "type": "css"
@@ -65,13 +70,13 @@
     "type": "js"
   },
   {
-    "name": "JS-download",
-    "path": "JS-download/index.html",
+    "name": "JS-hugeTask",
+    "path": "JS-hugeTask/index.html",
     "type": "js"
   },
   {
-    "name": "JS-hugeTask",
-    "path": "JS-hugeTask/index.html",
+    "name": "JS-img-download",
+    "path": "JS-img-download/index.html",
     "type": "js"
   },
   {
